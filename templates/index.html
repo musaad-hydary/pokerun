@@ -255,6 +255,13 @@
                   </div>
                   <button class="toggle-btn" id="hintsBtn">OFF</button>
                 </div>
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">SHINY CHANCE</span>
+                    <span class="toggle-desc">1 in 8 chance each Pokémon appears shiny</span>
+                  </div>
+                  <button class="toggle-btn" id="shinyBtn">OFF</button>
+                </div>
               </div>
             </div>
           </div>
@@ -281,6 +288,15 @@
                     "
                   >
                     AUTO · SEASONAL
+                  </button>
+                </div>
+                <div class="env-row" style="grid-template-columns: 1fr">
+                  <button
+                    class="env-btn env-btn-auto"
+                    data-val="rotate"
+                    style="background: linear-gradient(90deg, #44bbd8 0%, #e8922e 20%, #a0c8e0 40%, #c03020 60%, #6618bb 100%);"
+                  >
+                    AUTO · ROTATE SPECIAL
                   </button>
                 </div>
                 <div class="env-category-label">SEASONS</div>
@@ -411,13 +427,7 @@
                   <button
                     class="env-btn"
                     data-val="ultra"
-                    style="
-                      background: linear-gradient(
-                        135deg,
-                        #6618bb 0%,
-                        #2e0066 100%
-                      );
-                    "
+                    style="background: linear-gradient(135deg, #6618bb 0%, #2e0066 100%);"
                   >
                     ULTRA SPACE
                   </button>
@@ -447,13 +457,16 @@
                 <div class="toggle-row">
                   <div class="toggle-info">
                     <span class="toggle-name">PAUSE BUTTON</span>
-                    <span class="toggle-desc"
-                      >Show pause button during the game</span
-                    >
+                    <span class="toggle-desc">Show pause button during the game</span>
                   </div>
-                  <button class="toggle-btn active" id="hidePauseBtn">
-                    ON
-                  </button>
+                  <button class="toggle-btn active" id="hidePauseBtn">ON</button>
+                </div>
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">ROTATED BG</span>
+                    <span class="toggle-desc">Rotate background 90° on portrait screens</span>
+                  </div>
+                  <button class="toggle-btn" id="rotatedBgBtn">OFF</button>
                 </div>
               </div>
             </div>
@@ -532,7 +545,10 @@
 
           <div class="bw-battle-top">
             <div class="bw-enemy-info">
-              <div class="bw-info-name" id="bwPokeName">???????????</div>
+              <div class="bw-name-row">
+                <div class="bw-info-name" id="bwPokeName">???????????</div>
+                <div class="shiny-badge hidden" id="shinyBadge">✨</div>
+              </div>
               <div class="bw-info-types" id="bwPokeTypes"></div>
               <div class="bw-hp-wrap">
                 <span class="bw-hp-label">HP</span>

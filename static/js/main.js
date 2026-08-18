@@ -3,7 +3,9 @@ window.REDUCED_MOTION  = false;
 window.FAST_MODE       = false;
 window.CRIES_ENABLED   = true;
 window.HINTS_ENABLED   = false;
+window.SHINY_CHANCE    = false;
 window.DAILY_MODE      = false;
+window.ROTATED_BG      = false;
 
 // ─── All-time stats ───────────────────────────────────
 const ALLTIME_KEY = 'pokerun_alltime';
@@ -297,6 +299,13 @@ hintsBtn.addEventListener('click', () => {
   hintsBtn.textContent = window.HINTS_ENABLED ? 'ON' : 'OFF';
 });
 
+const shinyBtn = document.getElementById('shinyBtn');
+shinyBtn.addEventListener('click', () => {
+  window.SHINY_CHANCE = !window.SHINY_CHANCE;
+  shinyBtn.classList.toggle('active', window.SHINY_CHANCE);
+  shinyBtn.textContent = window.SHINY_CHANCE ? 'ON' : 'OFF';
+});
+
 const hidePauseBtn = document.getElementById('hidePauseBtn');
 hidePauseBtn.addEventListener('click', () => {
   const isOn = document.getElementById('pauseBtn').style.display !== 'none';
@@ -304,6 +313,14 @@ hidePauseBtn.addEventListener('click', () => {
   document.getElementById('pauseBtn').style.display = newOn ? '' : 'none';
   hidePauseBtn.classList.toggle('active', newOn);
   hidePauseBtn.textContent = newOn ? 'ON' : 'OFF';
+});
+
+const rotatedBgBtn = document.getElementById('rotatedBgBtn');
+rotatedBgBtn.addEventListener('click', () => {
+  window.ROTATED_BG = !window.ROTATED_BG;
+  rotatedBgBtn.classList.toggle('active', window.ROTATED_BG);
+  rotatedBgBtn.textContent = window.ROTATED_BG ? 'ON' : 'OFF';
+  sizeGameWrap();
 });
 
 // ── TRAINER SHOP ──────────────────────────────────────
@@ -559,35 +576,60 @@ function sizeGameWrap() {
   const screen = document.getElementById('gameScreen');
   const vw = (window.visualViewport?.width  ?? window.innerWidth);
   const vh = (window.visualViewport?.height ?? window.innerHeight);
-  const aspect  = 16 / 9;
-  const isPortrait = vh > vw;
+  const canvas     = document.getElementById('gameCanvas');
   const isTouch    = window.matchMedia('(pointer: coarse)').matches;
+  const isPortrait = vh > vw;
 
-  if (isPortrait && isTouch) {
-    // Mobile portrait: rotate 90° so the 16:9 game fills the portrait screen
-    let gameH = vw;
-    let gameW = gameH * aspect;
-    if (gameW > vh) { gameW = vh; gameH = gameW / aspect; }
-
-    wrap.style.width           = Math.round(gameW) + 'px';
-    wrap.style.height          = Math.round(gameH) + 'px';
+  if (isTouch && isPortrait) {
+    // Portrait mobile: fill the full screen (stretched)
+    wrap.style.width           = vw + 'px';
+    wrap.style.height          = vh + 'px';
     wrap.style.position        = 'absolute';
-    wrap.style.left            = Math.round((vw - gameW) / 2) + 'px';
-    wrap.style.top             = Math.round((vh - gameH) / 2) + 'px';
-    wrap.style.transform       = 'rotate(90deg)';
-    wrap.style.transformOrigin = 'center center';
+    wrap.style.left            = '0';
+    wrap.style.top             = '0';
+    wrap.style.transform       = '';
+    wrap.style.transformOrigin = '';
     screen.style.overflow      = 'hidden';
+
+    if (window.ROTATED_BG) {
+      // Special rotation mode: canvas rotates 90° so road faces upward
+      canvas.style.position        = 'absolute';
+      canvas.style.width           = vh + 'px';
+      canvas.style.height          = vw + 'px';
+      canvas.style.left            = ((vw - vh) / 2) + 'px';
+      canvas.style.top             = ((vh - vw) / 2) + 'px';
+      canvas.style.transform       = 'rotate(90deg)';
+      canvas.style.transformOrigin = 'center center';
+    } else {
+      canvas.style.position        = '';
+      canvas.style.width           = '';
+      canvas.style.height          = '';
+      canvas.style.left            = '';
+      canvas.style.top             = '';
+      canvas.style.transform       = '';
+      canvas.style.transformOrigin = '';
+    }
   } else {
+    // Desktop / landscape: maintain 16:9, centered
+    const aspect = 16 / 9;
     let w = vw, h = w / aspect;
     if (h > vh) { h = vh; w = h * aspect; }
     wrap.style.width           = Math.round(w) + 'px';
     wrap.style.height          = Math.round(h) + 'px';
-    wrap.style.position        = '';
-    wrap.style.left            = '';
-    wrap.style.top             = '';
+    wrap.style.position        = 'absolute';
+    wrap.style.left            = Math.round((vw - w) / 2) + 'px';
+    wrap.style.top             = Math.round((vh - h) / 2) + 'px';
     wrap.style.transform       = '';
     wrap.style.transformOrigin = '';
     screen.style.overflow      = '';
+
+    canvas.style.position        = '';
+    canvas.style.width           = '';
+    canvas.style.height          = '';
+    canvas.style.left            = '';
+    canvas.style.top             = '';
+    canvas.style.transform       = '';
+    canvas.style.transformOrigin = '';
   }
 }
 

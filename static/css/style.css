@@ -21,7 +21,8 @@ body {
 ──────────────────────────────────────────────────── */
 .screen        { display: none; width: 100%; min-height: 100dvh; align-items: center; justify-content: center; }
 .screen.active { display: flex; }
-#gameScreen    { background: #0a0a14; position: relative; }
+#gameScreen    { background: #0a0a14; position: relative; overflow: hidden; }
+
 
 /* ────────────────────────────────────────────────────
    Menu screen — dark overworld tile background
@@ -313,6 +314,7 @@ body {
   border-color: #888;
   transform: none;
 }
+.daily-play-btn:disabled:hover { background: #999; border-color: #888; }
 .daily-share-btn {
   background: #1565C0;
   border-color: #0d47a1;
@@ -891,14 +893,28 @@ body {
   z-index: 2;
 }
 
+.bw-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 3px;
+}
 .bw-info-name {
   font-size: clamp(9px, 1.1vw, 18px);
   color: #111;
   letter-spacing: 0.5px;
-  margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.shiny-badge {
+  font-size: clamp(8px, 1vw, 14px);
+  flex-shrink: 0;
+  animation: shiny-pulse 1.4s ease-in-out infinite;
+}
+@keyframes shiny-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.25); }
 }
 
 .bw-info-types { display: flex; gap: 3px; margin-bottom: 4px; min-height: 10px; }

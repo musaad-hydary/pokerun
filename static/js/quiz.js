@@ -1,6 +1,8 @@
 'use strict';
 
-const ANIMATED_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/';
+const ANIMATED_BASE        = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/';
+const ANIMATED_SHINY_BASE  = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/';
+const SHINY_ARTWORK_BASE   = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/';
 
 class Quiz {
   constructor() {
@@ -24,7 +26,10 @@ class Quiz {
     this.answered    = false;
     this.mode        = mode;
     this.sprite_type = sprite_type;
+    this.isShiny     = window.SHINY_CHANCE && Math.random() < 0.1;
     this._stopTimer();
+
+    document.getElementById('shinyBadge').classList.toggle('hidden', !this.isShiny);
 
     // ── Pokémon cry ───────────────────────────────────
     if (window.CRIES_ENABLED || mode === 'cry_only') {
@@ -49,7 +54,7 @@ class Quiz {
       numEl.textContent = `#${String(pokemon.id).padStart(3, '0')}`;
     } else if (mode === 'silhouette') {
       if (sprite_type === 'animated') {
-        img.src = `${ANIMATED_BASE}${pokemon.id}.gif`;
+        img.src = this.isShiny ? `${ANIMATED_SHINY_BASE}${pokemon.id}.gif` : `${ANIMATED_BASE}${pokemon.id}.gif`;
         img.onerror = () => { img.src = pokemon.official_artwork || pokemon.sprite || ''; img.onerror = null; };
       } else {
         img.src = pokemon.official_artwork || pokemon.sprite || '';
@@ -57,10 +62,10 @@ class Quiz {
       img.classList.add('silhouette');
     } else {
       if (sprite_type === 'animated') {
-        img.src = `${ANIMATED_BASE}${pokemon.id}.gif`;
+        img.src = this.isShiny ? `${ANIMATED_SHINY_BASE}${pokemon.id}.gif` : `${ANIMATED_BASE}${pokemon.id}.gif`;
         img.onerror = () => { img.src = pokemon.official_artwork || pokemon.sprite || ''; img.onerror = null; };
       } else {
-        img.src = pokemon.official_artwork || pokemon.sprite || '';
+        img.src = this.isShiny ? `${SHINY_ARTWORK_BASE}${pokemon.id}.png` : (pokemon.official_artwork || pokemon.sprite || '');
       }
     }
 
@@ -161,10 +166,10 @@ class Quiz {
 
   _setRevealSrc(img) {
     if (this.sprite_type === 'animated') {
-      img.src = `${ANIMATED_BASE}${this.pokemon.id}.gif`;
+      img.src = this.isShiny ? `${ANIMATED_SHINY_BASE}${this.pokemon.id}.gif` : `${ANIMATED_BASE}${this.pokemon.id}.gif`;
       img.onerror = () => { img.src = this.pokemon.official_artwork || this.pokemon.sprite || ''; img.onerror = null; };
     } else {
-      img.src = this.pokemon.official_artwork || this.pokemon.sprite || '';
+      img.src = this.isShiny ? `${SHINY_ARTWORK_BASE}${this.pokemon.id}.png` : (this.pokemon.official_artwork || this.pokemon.sprite || '');
     }
   }
 
