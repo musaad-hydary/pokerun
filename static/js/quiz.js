@@ -20,8 +20,10 @@ class Quiz {
   }
 
   _show({ pokemon, choices, mode, answer, sprite_type, timer, theme }) {
-    this.pokemon  = pokemon;
-    this.answered = false;
+    this.pokemon     = pokemon;
+    this.answered    = false;
+    this.mode        = mode;
+    this.sprite_type = sprite_type;
     this._stopTimer();
 
     // ── Pokémon cry ───────────────────────────────────
@@ -110,7 +112,7 @@ class Quiz {
         const btn = document.createElement('button');
         btn.className   = 'choice-btn';
         btn.dataset.id  = choice.id;
-        btn.textContent = `${['a)','b)','c)','d)'][i]}  ${choice.name.toUpperCase()}`;
+        btn.textContent = `${['a)','b)','c)','d)'][i]}  ${this._cleanName(choice.name).toUpperCase()}`;
         btn.addEventListener('click', () => this._pick(choice, btn));
         grid.appendChild(btn);
       });
@@ -143,13 +145,31 @@ class Quiz {
   }
 
   _revealArtwork() {
-    const indicator = document.getElementById('cryIndicator');
-    const img       = document.getElementById('pokeImg');
-    if (!indicator.classList.contains('hidden')) {
-      indicator.classList.add('hidden');
-      img.src = this.pokemon.official_artwork || this.pokemon.sprite || '';
+    const img = document.getElementById('pokeImg');
+    if (this.mode === 'cry_only') {
+      document.getElementById('cryIndicator').classList.add('hidden');
+      this._setRevealSrc(img);
       img.style.display = 'block';
+    } else if (this.mode === 'number_only') {
+      document.getElementById('pokeNum').classList.add('hidden');
+      this._setRevealSrc(img);
+      img.style.display = 'block';
+    } else if (this.mode === 'silhouette') {
+      img.classList.remove('silhouette');
     }
+  }
+
+  _setRevealSrc(img) {
+    if (this.sprite_type === 'animated') {
+      img.src = `${ANIMATED_BASE}${this.pokemon.id}.gif`;
+      img.onerror = () => { img.src = this.pokemon.official_artwork || this.pokemon.sprite || ''; img.onerror = null; };
+    } else {
+      img.src = this.pokemon.official_artwork || this.pokemon.sprite || '';
+    }
+  }
+
+  _cleanName(name) {
+    return name.replace(/\s+(family of (four|three)|male|female)$/i, '').trim();
   }
 
   playCry(id) {
@@ -218,12 +238,13 @@ class Quiz {
       this.answered = true;
       this._stopTimer();
 
-      const correct = this._normalize(typed) === this._normalize(this.pokemon.name);
+      const correct = this._normalize(typed) === this._normalize(this.pokemon.name) ||
+                      this._normalize(typed) === this._normalize(this._cleanName(this.pokemon.name));
       inp.disabled = true;
       sub.disabled = true;
       inp.classList.add(correct ? 'correct' : 'wrong');
 
-      document.getElementById('bwPokeName').textContent = this.pokemon.name.toUpperCase();
+      document.getElementById('bwPokeName').textContent = this._cleanName(this.pokemon.name).toUpperCase();
       this._revealArtwork();
       if (window.HINTS_ENABLED) this._showTypes(this.pokemon);
       const hpBar = document.getElementById('bwHpBar');
