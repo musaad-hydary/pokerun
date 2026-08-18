@@ -1,423 +1,615 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>PokéRun</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-
-  <!-- ══ MENU ══════════════════════════════════════════ -->
-  <div id="menuScreen" class="screen active">
-    <div class="menu-panel">
-
-      <div class="mp-header">
-        <div class="mp-pokeball"></div>
-        <div class="mp-title-wrap">
-          <span class="mp-title">POKERUN</span>
-          <span class="mp-subtitle">POKEDEX QUIZ</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>PokéRun</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <!-- ══ MENU ══════════════════════════════════════════ -->
+    <div id="menuScreen" class="screen active">
+      <div class="menu-panel">
+        <div class="mp-header">
+          <div class="mp-pokeball"></div>
+          <div class="mp-title-wrap">
+            <span class="mp-title">POKERUN</span>
+            <span class="mp-subtitle">POKEDEX QUIZ</span>
+          </div>
+          <button class="pxbtn mp-shop-btn" id="shopBtn" title="Trainer Select">
+            TRAINER
+          </button>
         </div>
-        <button class="pxbtn mp-shop-btn" id="shopBtn" title="Trainer Select">TRAINER</button>
-      </div>
 
-      <!-- ── TAB NAV ── -->
-      <div class="menu-tabs">
-        <button class="menu-tab active" data-tab="daily">DAILY</button>
-        <button class="menu-tab" data-tab="play">PLAY</button>
-        <button class="menu-tab" data-tab="options">OPTIONS</button>
-        <button class="menu-tab" data-tab="vibes">VIBES</button>
-      </div>
+        <!-- ── TAB NAV ── -->
+        <div class="menu-tabs">
+          <button class="menu-tab active" data-tab="daily">DAILY</button>
+          <button class="menu-tab" data-tab="play">PLAY</button>
+          <button class="menu-tab" data-tab="options">OPTIONS</button>
+          <button class="menu-tab" data-tab="vibes">VIBES</button>
+        </div>
 
-      <div class="mp-body">
+        <div class="mp-body">
+          <!-- ── DAILY TAB ── -->
+          <div class="tab-panel" id="tab-daily">
+            <div class="daily-head">
+              <span class="daily-title">TODAY'S CHALLENGE</span>
+              <span class="daily-date" id="dailyDate">—</span>
+            </div>
 
-        <!-- ── DAILY TAB ── -->
-        <div class="tab-panel" id="tab-daily">
+            <div class="daily-rules">
+              <span class="daily-rule">SILHOUETTE</span>
+              <span class="daily-rule">TYPED</span>
+              <span class="daily-rule">10 SEC TIMER</span>
+              <span class="daily-rule">1 LIFE</span>
+              <span class="daily-rule">SEASONAL</span>
+              <span class="daily-rule">6 QUESTIONS</span>
+            </div>
 
-          <div class="daily-head">
-            <span class="daily-title">TODAY'S CHALLENGE</span>
-            <span class="daily-date" id="dailyDate">—</span>
-          </div>
+            <div id="dailyResult" class="daily-result"></div>
 
-          <div class="daily-rules">
-            <span class="daily-rule">SILHOUETTE</span>
-            <span class="daily-rule">TYPED</span>
-            <span class="daily-rule">10 SEC TIMER</span>
-            <span class="daily-rule">1 LIFE</span>
-            <span class="daily-rule">SEASONAL</span>
-            <span class="daily-rule">6 QUESTIONS</span>
-          </div>
-
-          <div id="dailyResult" class="daily-result"></div>
-
-          <div class="daily-actions">
-            <button class="pxbtn daily-play-btn" id="dailyStartBtn" disabled>LOADING...</button>
-            <button class="pxbtn daily-share-btn hidden" id="dailyShareBtn">SHARE</button>
-          </div>
-
-        </div><!-- /tab-daily -->
-
-        <!-- ── PLAY TAB ── -->
-        <div class="tab-panel hidden" id="tab-play">
-
-          <div class="mp-section">
-            <div class="mp-section-label">DISPLAY MODE</div>
-            <div class="mode-grid" id="modeGroup">
-              <button class="mode-card active" data-val="name_from_image">
-                <span class="mode-card-label">IMAGE</span>
-                <span class="mode-card-desc">See the Pokémon</span>
+            <div class="daily-actions">
+              <button class="pxbtn daily-play-btn" id="dailyStartBtn" disabled>
+                LOADING...
               </button>
-              <button class="mode-card" data-val="silhouette">
-                <span class="mode-card-label">SILHOUETTE</span>
-                <span class="mode-card-desc">Guess the shadow</span>
-              </button>
-              <button class="mode-card" data-val="number_only">
-                <span class="mode-card-label">NUMBER</span>
-                <span class="mode-card-desc">Pokédex number only</span>
-              </button>
-              <button class="mode-card" data-val="cry_only">
-                <span class="mode-card-label">CRIES ONLY</span>
-                <span class="mode-card-desc">Name that sound</span>
+              <button class="pxbtn daily-share-btn hidden" id="dailyShareBtn">
+                SHARE
               </button>
             </div>
           </div>
+          <!-- /tab-daily -->
 
-          <div class="mp-section">
-            <div class="mp-section-label">ANSWER MODE</div>
-            <div class="btn-group" id="answerGroup">
-              <button class="pxbtn active" data-val="mc">MULTIPLE CHOICE</button>
-              <button class="pxbtn"        data-val="typed">TYPED</button>
-            </div>
-          </div>
-
-          <div class="mp-row2">
+          <!-- ── PLAY TAB ── -->
+          <div class="tab-panel hidden" id="tab-play">
             <div class="mp-section">
-              <div class="mp-section-label">GENERATION</div>
-              <select class="px-select" id="genSelect">
-                <option value="all">All Generations</option>
-                <option value="gen1">Gen I — Kanto</option>
-                <option value="gen2">Gen II — Johto</option>
-                <option value="gen3">Gen III — Hoenn</option>
-                <option value="gen4">Gen IV — Sinnoh</option>
-                <option value="gen5">Gen V — Unova</option>
-                <option value="gen6">Gen VI — Kalos</option>
-                <option value="gen7">Gen VII — Alola</option>
-                <option value="gen8">Gen VIII — Galar</option>
-                <option value="gen9">Gen IX — Paldea</option>
-              </select>
-            </div>
-            <div class="mp-section">
-              <div class="mp-section-label">TYPE FILTER</div>
-              <div class="type-filter-wrap">
-                <select class="px-select" id="typeSelect">
-                  <option value="all">All Types</option>
-                  <option value="normal">Normal</option>
-                  <option value="fire">Fire</option>
-                  <option value="water">Water</option>
-                  <option value="electric">Electric</option>
-                  <option value="grass">Grass</option>
-                  <option value="ice">Ice</option>
-                  <option value="fighting">Fighting</option>
-                  <option value="poison">Poison</option>
-                  <option value="ground">Ground</option>
-                  <option value="flying">Flying</option>
-                  <option value="psychic">Psychic</option>
-                  <option value="bug">Bug</option>
-                  <option value="rock">Rock</option>
-                  <option value="ghost">Ghost</option>
-                  <option value="dragon">Dragon</option>
-                  <option value="dark">Dark</option>
-                  <option value="steel">Steel</option>
-                  <option value="fairy">Fairy</option>
-                </select>
-                <span class="type-preview-badge" id="typePreviewBadge"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mp-section">
-            <div class="mp-section-label">QUESTIONS</div>
-            <div class="btn-group" id="countGroup">
-              <button class="pxbtn active" data-val="10">10</button>
-              <button class="pxbtn"        data-val="20">20</button>
-              <button class="pxbtn"        data-val="50">50</button>
-              <button class="pxbtn"        data-val="0">ALL</button>
-            </div>
-            <input class="count-custom-input" id="countCustom"
-                   type="number" min="1" max="1025" placeholder="custom number">
-          </div>
-
-        </div><!-- /tab-play -->
-
-        <!-- ── OPTIONS TAB ── -->
-        <div class="tab-panel hidden" id="tab-options">
-
-          <div class="mp-row2">
-            <div class="mp-section">
-              <div class="mp-section-label">SPRITE STYLE</div>
-              <div class="btn-group" id="spriteGroup">
-                <button class="pxbtn active" data-val="still">STILL ART</button>
-                <button class="pxbtn"        data-val="animated">ANIMATED</button>
-              </div>
-            </div>
-            <div class="mp-section">
-              <div class="mp-section-label">QUESTION ORDER</div>
-              <button class="pxbtn" id="orderBtn" data-val="ordered">IN ORDER</button>
-              <div class="mp-hint">off = random</div>
-            </div>
-          </div>
-
-          <div class="mp-row2">
-            <div class="mp-section">
-              <div class="mp-section-label">TIMER</div>
-              <div class="btn-group" id="timerGroup">
-                <button class="pxbtn active" data-val="0">NONE</button>
-                <button class="pxbtn"        data-val="10">10s</button>
-                <button class="pxbtn"        data-val="20">20s</button>
-                <button class="pxbtn"        data-val="30">30s</button>
-              </div>
-              <input class="count-custom-input" id="timerCustom"
-                     type="number" min="5" max="300" placeholder="custom (sec)">
-            </div>
-            <div class="mp-section">
-              <div class="mp-section-label">LIVES</div>
-              <div class="btn-group" id="livesGroup">
-                <button class="pxbtn active" data-val="0">UNLIMITED</button>
-                <button class="pxbtn"        data-val="1">1</button>
-                <button class="pxbtn"        data-val="2">2</button>
-                <button class="pxbtn"        data-val="3">3</button>
-                <button class="pxbtn"        data-val="5">5</button>
-              </div>
-              <input class="count-custom-input" id="livesCustom"
-                     type="number" min="1" max="99" placeholder="custom #">
-            </div>
-          </div>
-
-          <div class="mp-section">
-            <div class="mp-section-label">QUIZ EXTRAS</div>
-            <div class="toggle-list">
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-name">POKÉMON CRIES</span>
-                  <span class="toggle-desc">Plays the cry sound on answer reveal</span>
-                </div>
-                <button class="toggle-btn active" id="criesBtn">ON</button>
-              </div>
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-name">HINTS</span>
-                  <span class="toggle-desc">Reveal a letter or type (costs points)</span>
-                </div>
-                <button class="toggle-btn" id="hintsBtn">OFF</button>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /tab-options -->
-
-        <!-- ── VIBES TAB ── -->
-        <div class="tab-panel hidden" id="tab-vibes">
-
-          <div class="mp-section">
-            <div class="mp-section-label">BACKGROUND</div>
-            <div id="seasonGroup">
-              <div class="env-row" style="grid-template-columns: 1fr;">
-                <button class="env-btn env-btn-auto active" data-val="seasonal"
-                  style="background: linear-gradient(90deg, #78c840 0%, #44bbd8 25%, #e8922e 55%, #a0c8e0 82%, #78c840 100%)">
-                  AUTO · SEASONAL
+              <div class="mp-section-label">DISPLAY MODE</div>
+              <div class="mode-grid" id="modeGroup">
+                <button class="mode-card active" data-val="name_from_image">
+                  <span class="mode-card-label">IMAGE</span>
+                  <span class="mode-card-desc">See the Pokémon</span>
+                </button>
+                <button class="mode-card" data-val="silhouette">
+                  <span class="mode-card-label">SILHOUETTE</span>
+                  <span class="mode-card-desc">Guess the shadow</span>
+                </button>
+                <button class="mode-card" data-val="number_only">
+                  <span class="mode-card-label">NUMBER</span>
+                  <span class="mode-card-desc">Pokédex number only</span>
+                </button>
+                <button class="mode-card" data-val="cry_only">
+                  <span class="mode-card-label">CRIES ONLY</span>
+                  <span class="mode-card-desc">Name that sound</span>
                 </button>
               </div>
-              <div class="env-category-label">SEASONS</div>
-              <div class="env-row">
-                <button class="env-btn" data-val="spring"  style="background: linear-gradient(to bottom, #6ec840 0%, #48bb58 100%)">SPRING</button>
-                <button class="env-btn" data-val="summer"  style="background: linear-gradient(to bottom, #44bbd8 0%, #60d870 100%)">SUMMER</button>
-                <button class="env-btn" data-val="autumn"  style="background: linear-gradient(to bottom, #e8922e 0%, #b86020 100%)">AUTUMN</button>
-                <button class="env-btn" data-val="winter"  style="background: linear-gradient(to bottom, #a0c8e0 0%, #d8edf8 60%, #f0f4f8 100%)">WINTER</button>
+            </div>
+
+            <div class="mp-section">
+              <div class="mp-section-label">ANSWER MODE</div>
+              <div class="btn-group" id="answerGroup">
+                <button class="pxbtn active" data-val="mc">
+                  MULTIPLE CHOICE
+                </button>
+                <button class="pxbtn" data-val="typed">TYPED</button>
               </div>
-              <div class="env-category-label">SPECIAL</div>
-              <div class="env-row env-row-3">
-                <button class="env-btn" data-val="beach"   style="background: linear-gradient(to bottom, #44b8e8 0%, #44b8e8 52%, #d4b870 52%, #c8a850 100%)">BEACH</button>
-                <button class="env-btn" data-val="storm"   style="background: linear-gradient(to bottom, #3a4858 0%, #506070 100%)">STORM</button>
-                <button class="env-btn" data-val="volcano" style="background: linear-gradient(to bottom, #c03020 0%, #802010 100%)">VOLCANO</button>
-                <button class="env-btn" data-val="fog"     style="background: linear-gradient(to bottom, #9090a0 0%, #b0b8c8 100%)">FOG</button>
-                <button class="env-btn" data-val="cave"    style="background: linear-gradient(to bottom, #332820 0%, #4a3828 100%)">CAVE</button>
-                <button class="env-btn" data-val="ultra"   style="background: linear-gradient(135deg, #6618bb 0%, #2e0066 100%)">ULTRA SPACE</button>
+            </div>
+
+            <div class="mp-row2">
+              <div class="mp-section">
+                <div class="mp-section-label">GENERATION</div>
+                <select class="px-select" id="genSelect">
+                  <option value="all">All Generations</option>
+                  <option value="gen1">Gen I — Kanto</option>
+                  <option value="gen2">Gen II — Johto</option>
+                  <option value="gen3">Gen III — Hoenn</option>
+                  <option value="gen4">Gen IV — Sinnoh</option>
+                  <option value="gen5">Gen V — Unova</option>
+                  <option value="gen6">Gen VI — Kalos</option>
+                  <option value="gen7">Gen VII — Alola</option>
+                  <option value="gen8">Gen VIII — Galar</option>
+                  <option value="gen9">Gen IX — Paldea</option>
+                </select>
+              </div>
+              <div class="mp-section">
+                <div class="mp-section-label">TYPE FILTER</div>
+                <div class="type-filter-wrap">
+                  <select class="px-select" id="typeSelect">
+                    <option value="all">All Types</option>
+                    <option value="normal">Normal</option>
+                    <option value="fire">Fire</option>
+                    <option value="water">Water</option>
+                    <option value="electric">Electric</option>
+                    <option value="grass">Grass</option>
+                    <option value="ice">Ice</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="poison">Poison</option>
+                    <option value="ground">Ground</option>
+                    <option value="flying">Flying</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="bug">Bug</option>
+                    <option value="rock">Rock</option>
+                    <option value="ghost">Ghost</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="dark">Dark</option>
+                    <option value="steel">Steel</option>
+                    <option value="fairy">Fairy</option>
+                  </select>
+                  <span class="type-preview-badge" id="typePreviewBadge"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mp-section">
+              <div class="mp-section-label">QUESTIONS</div>
+              <div class="btn-group" id="countGroup">
+                <button class="pxbtn active" data-val="10">10</button>
+                <button class="pxbtn" data-val="20">20</button>
+                <button class="pxbtn" data-val="50">50</button>
+                <button class="pxbtn" data-val="0">ALL</button>
+              </div>
+              <input
+                class="count-custom-input"
+                id="countCustom"
+                type="number"
+                min="1"
+                max="1025"
+                placeholder="custom number"
+              />
+            </div>
+          </div>
+          <!-- /tab-play -->
+
+          <!-- ── OPTIONS TAB ── -->
+          <div class="tab-panel hidden" id="tab-options">
+            <div class="mp-row2">
+              <div class="mp-section">
+                <div class="mp-section-label">SPRITE STYLE</div>
+                <div class="btn-group" id="spriteGroup">
+                  <button class="pxbtn active" data-val="still">
+                    STILL ART
+                  </button>
+                  <button class="pxbtn" data-val="animated">ANIMATED</button>
+                </div>
+              </div>
+              <div class="mp-section">
+                <div class="mp-section-label">QUESTION ORDER</div>
+                <button class="pxbtn" id="orderBtn" data-val="ordered">
+                  IN ORDER
+                </button>
+                <div class="mp-hint">off = random</div>
+              </div>
+            </div>
+
+            <div class="mp-row2">
+              <div class="mp-section">
+                <div class="mp-section-label">TIMER</div>
+                <div class="btn-group" id="timerGroup">
+                  <button class="pxbtn active" data-val="0">NONE</button>
+                  <button class="pxbtn" data-val="10">10s</button>
+                  <button class="pxbtn" data-val="20">20s</button>
+                  <button class="pxbtn" data-val="30">30s</button>
+                </div>
+                <input
+                  class="count-custom-input"
+                  id="timerCustom"
+                  type="number"
+                  min="5"
+                  max="300"
+                  placeholder="custom (sec)"
+                />
+              </div>
+              <div class="mp-section">
+                <div class="mp-section-label">LIVES</div>
+                <div class="btn-group" id="livesGroup">
+                  <button class="pxbtn active" data-val="0">UNLIMITED</button>
+                  <button class="pxbtn" data-val="1">1</button>
+                  <button class="pxbtn" data-val="2">2</button>
+                  <button class="pxbtn" data-val="3">3</button>
+                  <button class="pxbtn" data-val="5">5</button>
+                </div>
+                <input
+                  class="count-custom-input"
+                  id="livesCustom"
+                  type="number"
+                  min="1"
+                  max="99"
+                  placeholder="custom #"
+                />
+              </div>
+            </div>
+
+            <div class="mp-section">
+              <div class="mp-section-label">QUIZ EXTRAS</div>
+              <div class="toggle-list">
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">POKÉMON CRIES</span>
+                    <span class="toggle-desc"
+                      >Plays the cry sound on answer reveal</span
+                    >
+                  </div>
+                  <button class="toggle-btn active" id="criesBtn">ON</button>
+                </div>
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">HINTS</span>
+                    <span class="toggle-desc"
+                      >Reveal a letter or type (costs points)</span
+                    >
+                  </div>
+                  <button class="toggle-btn" id="hintsBtn">OFF</button>
+                </div>
               </div>
             </div>
           </div>
+          <!-- /tab-options -->
 
-          <div class="mp-section">
-            <div class="mp-section-label">ACCESSIBILITY</div>
-            <div class="toggle-list">
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-name">REDUCE FLASH</span>
-                  <span class="toggle-desc">Limits screen flashes and animations</span>
+          <!-- ── VIBES TAB ── -->
+          <div class="tab-panel hidden" id="tab-vibes">
+            <div class="mp-section">
+              <div class="mp-section-label">BACKGROUND</div>
+              <div id="seasonGroup">
+                <div class="env-row" style="grid-template-columns: 1fr">
+                  <button
+                    class="env-btn env-btn-auto active"
+                    data-val="seasonal"
+                    style="
+                      background: linear-gradient(
+                        90deg,
+                        #78c840 0%,
+                        #44bbd8 25%,
+                        #e8922e 55%,
+                        #a0c8e0 82%,
+                        #78c840 100%
+                      );
+                    "
+                  >
+                    AUTO · SEASONAL
+                  </button>
                 </div>
-                <button class="toggle-btn" id="reduceMotionBtn">OFF</button>
+                <div class="env-category-label">SEASONS</div>
+                <div class="env-row">
+                  <button
+                    class="env-btn"
+                    data-val="spring"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #6ec840 0%,
+                        #48bb58 100%
+                      );
+                    "
+                  >
+                    SPRING
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="summer"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #44bbd8 0%,
+                        #60d870 100%
+                      );
+                    "
+                  >
+                    SUMMER
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="autumn"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #e8922e 0%,
+                        #b86020 100%
+                      );
+                    "
+                  >
+                    AUTUMN
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="winter"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #a0c8e0 0%,
+                        #d8edf8 60%,
+                        #f0f4f8 100%
+                      );
+                    "
+                  >
+                    WINTER
+                  </button>
+                </div>
+                <div class="env-category-label">SPECIAL</div>
+                <div class="env-row env-row-3">
+                  <button
+                    class="env-btn"
+                    data-val="beach"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #44b8e8 0%,
+                        #44b8e8 52%,
+                        #d4b870 52%,
+                        #c8a850 100%
+                      );
+                    "
+                  >
+                    BEACH
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="storm"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #3a4858 0%,
+                        #506070 100%
+                      );
+                    "
+                  >
+                    STORM
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="volcano"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #c03020 0%,
+                        #802010 100%
+                      );
+                    "
+                  >
+                    VOLCANO
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="fog"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #9090a0 0%,
+                        #b0b8c8 100%
+                      );
+                    "
+                  >
+                    FOG
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="cave"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        #332820 0%,
+                        #4a3828 100%
+                      );
+                    "
+                  >
+                    CAVE
+                  </button>
+                  <button
+                    class="env-btn"
+                    data-val="ultra"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #6618bb 0%,
+                        #2e0066 100%
+                      );
+                    "
+                  >
+                    ULTRA SPACE
+                  </button>
+                </div>
               </div>
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-name">FAST MODE</span>
-                  <span class="toggle-desc">Skip transition animations</span>
+            </div>
+
+            <div class="mp-section">
+              <div class="mp-section-label">ACCESSIBILITY</div>
+              <div class="toggle-list">
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">REDUCE FLASH</span>
+                    <span class="toggle-desc"
+                      >Limits screen flashes and animations</span
+                    >
+                  </div>
+                  <button class="toggle-btn" id="reduceMotionBtn">OFF</button>
                 </div>
-                <button class="toggle-btn" id="fastModeBtn">OFF</button>
-              </div>
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-name">PAUSE BUTTON</span>
-                  <span class="toggle-desc">Show pause button during the game</span>
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">FAST MODE</span>
+                    <span class="toggle-desc">Skip transition animations</span>
+                  </div>
+                  <button class="toggle-btn" id="fastModeBtn">OFF</button>
                 </div>
-                <button class="toggle-btn active" id="hidePauseBtn">ON</button>
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-name">PAUSE BUTTON</span>
+                    <span class="toggle-desc"
+                      >Show pause button during the game</span
+                    >
+                  </div>
+                  <button class="toggle-btn active" id="hidePauseBtn">
+                    ON
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+          <!-- /tab-vibes -->
+        </div>
+        <!-- /mp-body -->
 
-        </div><!-- /tab-vibes -->
-
-      </div><!-- /mp-body -->
-
-      <div class="mp-footer">
-        <button class="pxbtn start-btn" id="startBtn">START GAME</button>
+        <div class="mp-footer">
+          <button class="pxbtn start-btn" id="startBtn">START GAME</button>
+        </div>
       </div>
+      <!-- /menu-panel -->
+    </div>
 
-    </div><!-- /menu-panel -->
-  </div>
-
-  <!-- ══ TRAINER SHOP MODAL ════════════════════════════ -->
-  <div id="shopModal" class="shop-modal hidden">
-    <div class="shop-panel">
-      <div class="shop-header">
-        <span class="shop-title">TRAINER SELECT</span>
-        <button class="pxbtn shop-close-btn" id="shopCloseBtn">CLOSE</button>
-      </div>
-      <div class="shop-body">
-        <p class="shop-desc">Choose your trainer. Selection applies immediately in the overworld.</p>
-        <div class="shop-grid" id="shopGrid"></div>
-      </div>
-      <div class="shop-footer">
-        <button class="pxbtn shop-confirm-btn" id="shopConfirmBtn">CONFIRM</button>
+    <!-- ══ TRAINER SHOP MODAL ════════════════════════════ -->
+    <div id="shopModal" class="shop-modal hidden">
+      <div class="shop-panel">
+        <div class="shop-header">
+          <span class="shop-title">TRAINER SELECT</span>
+          <button class="pxbtn shop-close-btn" id="shopCloseBtn">CLOSE</button>
+        </div>
+        <div class="shop-body">
+          <p class="shop-desc">Choose your trainer!</p>
+          <div class="shop-grid" id="shopGrid"></div>
+        </div>
+        <div class="shop-footer">
+          <button class="pxbtn shop-confirm-btn" id="shopConfirmBtn">
+            CONFIRM
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ══ GAME ══════════════════════════════════════════ -->
-  <div id="gameScreen" class="screen">
-    <div class="game-wrap" id="gameWrap">
+    <!-- ══ GAME ══════════════════════════════════════════ -->
+    <div id="gameScreen" class="screen">
+      <div class="game-wrap" id="gameWrap">
+        <canvas id="gameCanvas"></canvas>
 
-      <canvas id="gameCanvas"></canvas>
-
-      <div class="hud">
-        <div class="hud-left">
-          <span id="hudScore">SCORE  0</span>
-          <span id="hudStreak" class="streak">STREAK  0</span>
-        </div>
-        <div class="hud-right">
-          <span id="hudProg">0 / 0</span>
-          <div id="livesHud" class="lives-hud"></div>
-        </div>
-      </div>
-
-      <button class="pause-btn" id="pauseBtn" title="Pause">&#9646;&#9646;</button>
-
-      <!-- ══ PAUSE OVERLAY ══════════════════════════════ -->
-      <div id="pauseOverlay" class="pause-overlay hidden">
-        <div class="pause-box">
-          <div class="pause-title">PAUSED</div>
-          <button class="pxbtn pause-action-btn" id="resumeBtn">RESUME</button>
-          <button class="pxbtn pause-action-btn" id="exitToMenuBtn">EXIT TO MENU</button>
-        </div>
-      </div>
-
-      <div id="seasonLabel" class="season-label hidden"></div>
-      <div id="encFlash" class="enc-flash hidden"></div>
-
-      <!-- ══ B&W BATTLE QUIZ OVERLAY ═══════════════════ -->
-      <div id="quizOverlay" class="quiz-overlay hidden">
-
-        <div class="quiz-timer-wrap" id="quizTimerWrap">
-          <div class="quiz-timer-fill" id="quizTimerFill"></div>
-        </div>
-
-        <div class="bw-battle-top">
-          <div class="bw-enemy-info">
-            <div class="bw-info-name" id="bwPokeName">???????????</div>
-            <div class="bw-info-types" id="bwPokeTypes"></div>
-            <div class="bw-hp-wrap">
-              <span class="bw-hp-label">HP</span>
-              <div class="bw-hp-track"><div class="bw-hp-bar" id="bwHpBar"></div></div>
-            </div>
+        <div class="hud">
+          <div class="hud-left">
+            <span id="hudScore">SCORE 0</span>
+            <span id="hudStreak" class="streak">STREAK 0</span>
           </div>
-          <div class="bw-sprite-wrap">
-            <img id="pokeImg" class="poke-img" src="" alt="">
-          </div>
-          <div id="pokeNum" class="poke-num hidden">#000</div>
-          <div id="cryIndicator" class="cry-indicator hidden">
-            <div class="cry-icon">&#9834;</div>
-            <div class="cry-label">LISTEN CAREFULLY</div>
+          <div class="hud-right">
+            <span id="hudProg">0 / 0</span>
+            <div id="livesHud" class="lives-hud"></div>
           </div>
         </div>
-        <button class="cry-replay-btn" id="cryReplayBtn" title="Replay cry">&#9654; CRY</button>
 
-        <div class="bw-battle-bottom">
-          <div class="bw-dialog-box">
-            <p id="quizQ" class="bw-dialog-text">WHO'S THAT POKEMON?</p>
-            <div class="hint-bar hidden" id="hintBar">
-              <div class="hint-display hidden" id="hintDisplay"></div>
-              <div class="hint-btns">
-                <button class="hint-btn" id="hintLetter">
-                  <span class="hint-label">LETTER</span>
-                  <span class="hint-cost">-50 PTS</span>
-                </button>
-                <button class="hint-btn" id="hintType">
-                  <span class="hint-label">TYPE</span>
-                  <span class="hint-cost">-25 PTS</span>
-                </button>
+        <button class="pause-btn" id="pauseBtn" title="Pause">
+          &#9646;&#9646;
+        </button>
+
+        <!-- ══ PAUSE OVERLAY ══════════════════════════════ -->
+        <div id="pauseOverlay" class="pause-overlay hidden">
+          <div class="pause-box">
+            <div class="pause-title">PAUSED</div>
+            <button class="pxbtn pause-action-btn" id="resumeBtn">
+              RESUME
+            </button>
+            <button class="pxbtn pause-action-btn" id="exitToMenuBtn">
+              EXIT TO MENU
+            </button>
+          </div>
+        </div>
+
+        <div id="seasonLabel" class="season-label hidden"></div>
+        <div id="encFlash" class="enc-flash hidden"></div>
+
+        <!-- ══ B&W BATTLE QUIZ OVERLAY ═══════════════════ -->
+        <div id="quizOverlay" class="quiz-overlay hidden">
+          <div class="quiz-timer-wrap" id="quizTimerWrap">
+            <div class="quiz-timer-fill" id="quizTimerFill"></div>
+          </div>
+
+          <div class="bw-battle-top">
+            <div class="bw-enemy-info">
+              <div class="bw-info-name" id="bwPokeName">???????????</div>
+              <div class="bw-info-types" id="bwPokeTypes"></div>
+              <div class="bw-hp-wrap">
+                <span class="bw-hp-label">HP</span>
+                <div class="bw-hp-track">
+                  <div class="bw-hp-bar" id="bwHpBar"></div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="bw-move-grid" id="choicesGrid"></div>
-        </div>
-
-      </div><!-- /quiz-overlay -->
-
-      <div id="resultBanner" class="result-banner hidden">
-        <div id="resultWord"     class="result-word"></div>
-        <div id="resultPokeName" class="result-poke-name"></div>
-      </div>
-
-      <!-- ══ RESULTS ════════════════════════════════════ -->
-      <div id="resultsScreen" class="results-screen hidden">
-        <div class="results-box">
-          <div class="results-header-bar">
-            <span class="results-title">RESULTS</span>
-            <div class="results-stats-row">
-              <span>SCORE <b id="rsScore">0</b></span>
-              <span>BEST STREAK <b id="rsStreak">0</b></span>
-              <span><b id="rsCorrect">0</b>/<b id="rsTotal">0</b></span>
+            <div class="bw-sprite-wrap">
+              <img id="pokeImg" class="poke-img" src="" alt="" />
+            </div>
+            <div id="pokeNum" class="poke-num hidden">#000</div>
+            <div id="cryIndicator" class="cry-indicator hidden">
+              <div class="cry-icon">&#9834;</div>
+              <div class="cry-label">LISTEN CAREFULLY</div>
             </div>
           </div>
-          <div class="results-grid" id="resultsGrid"></div>
-          <div class="results-footer">
-            <button class="pxbtn results-start-btn" id="rsPlayAgainBtn">PLAY AGAIN</button>
-            <div class="rs-tomorrow hidden" id="rsTomorrowMsg">TRY AGAIN TOMORROW</div>
-            <button class="pxbtn results-share-btn" id="rsShareBtn">SHARE</button>
-            <button class="pxbtn results-menu-btn"  id="rsMenuBtn">MENU</button>
+          <button class="cry-replay-btn" id="cryReplayBtn" title="Replay cry">
+            &#9654; CRY
+          </button>
+
+          <div class="bw-battle-bottom">
+            <div class="bw-dialog-box">
+              <p id="quizQ" class="bw-dialog-text">WHO'S THAT POKEMON?</p>
+              <div class="hint-bar hidden" id="hintBar">
+                <div class="hint-display hidden" id="hintDisplay"></div>
+                <div class="hint-btns">
+                  <button class="hint-btn" id="hintLetter">
+                    <span class="hint-label">LETTER</span>
+                    <span class="hint-cost">-50 PTS</span>
+                  </button>
+                  <button class="hint-btn" id="hintType">
+                    <span class="hint-label">TYPE</span>
+                    <span class="hint-cost">-25 PTS</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="bw-move-grid" id="choicesGrid"></div>
+          </div>
+        </div>
+        <!-- /quiz-overlay -->
+
+        <div id="resultBanner" class="result-banner hidden">
+          <div id="resultWord" class="result-word"></div>
+          <div id="resultPokeName" class="result-poke-name"></div>
+        </div>
+
+        <!-- ══ RESULTS ════════════════════════════════════ -->
+        <div id="resultsScreen" class="results-screen hidden">
+          <div class="results-box">
+            <div class="results-header-bar">
+              <span class="results-title">RESULTS</span>
+              <div class="results-stats-row">
+                <span>SCORE <b id="rsScore">0</b></span>
+                <span>BEST STREAK <b id="rsStreak">0</b></span>
+                <span><b id="rsCorrect">0</b>/<b id="rsTotal">0</b></span>
+              </div>
+            </div>
+            <div class="results-grid" id="resultsGrid"></div>
+            <div class="results-footer">
+              <button class="pxbtn results-start-btn" id="rsPlayAgainBtn">
+                PLAY AGAIN
+              </button>
+              <div class="rs-tomorrow hidden" id="rsTomorrowMsg">
+                TRY AGAIN TOMORROW
+              </div>
+              <button class="pxbtn results-share-btn" id="rsShareBtn">
+                SHARE
+              </button>
+              <button class="pxbtn results-menu-btn" id="rsMenuBtn">
+                MENU
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <!-- /game-wrap -->
+    </div>
 
-    </div><!-- /game-wrap -->
-  </div>
-
-  <script src="/static/js/api.js"></script>
-  <script src="/static/js/game.js"></script>
-  <script src="/static/js/quiz.js"></script>
-  <script src="/static/js/share.js"></script>
-  <script src="/static/js/main.js"></script>
-</body>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/game.js"></script>
+    <script src="/static/js/quiz.js"></script>
+    <script src="/static/js/share.js"></script>
+    <script src="/static/js/main.js"></script>
+  </body>
 </html>

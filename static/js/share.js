@@ -16,9 +16,8 @@ async function generateShareImage({ score, bestStreak, correct, total, results, 
 
   const CW          = Math.floor((CARD_W - GRID_PAD * 2) / COLS);
   const CH          = Math.round(CW * 1.1);
-  const LABEL_H     = Math.max(14, Math.round(CW * 0.15));
   const STRIPE_H    = 3;
-  const SPRITE_AREA = CH - STRIPE_H - LABEL_H;
+  const SPRITE_AREA = CH - STRIPE_H;
   const SPRITE_PAD  = 4;
   const SPRITE_SIZE = Math.max(8, SPRITE_AREA - SPRITE_PAD * 2);
 
@@ -151,6 +150,7 @@ async function generateShareImage({ score, bestStreak, correct, total, results, 
 
     // Sprite
     if (imgs[i]) {
+      if (isDaily) ctx.filter = 'brightness(0)';
       ctx.drawImage(
         imgs[i],
         x + (CW - SPRITE_SIZE) / 2,
@@ -158,23 +158,8 @@ async function generateShareImage({ score, bestStreak, correct, total, results, 
         SPRITE_SIZE,
         SPRITE_SIZE
       );
+      if (isDaily) ctx.filter = 'none';
     }
-
-    // Name label area
-    const LY = y + STRIPE_H + SPRITE_AREA;
-    ctx.fillStyle = isOk ? '#e8f8ec' : '#f8e8e8';
-    ctx.fillRect(x + 1, LY, CW - 2, LABEL_H);
-
-    const namePx = Math.max(4, Math.round(CW * 0.075));
-    ctx.font = `${namePx}px "Press Start 2P"`;
-    ctx.fillStyle = '#333';
-    ctx.textAlign = 'center';
-    ctx.fillText(
-      r.pokemon.name.toUpperCase().slice(0, 8),
-      x + CW / 2,
-      LY + LABEL_H * 0.72
-    );
-    ctx.textAlign = 'left';
   });
 
   return canvas;
