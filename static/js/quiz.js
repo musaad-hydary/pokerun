@@ -178,7 +178,10 @@ class Quiz {
   }
 
   _cleanName(name) {
-    return name.replace(/\s+(family of (four|three)|male|female)$/i, '').trim();
+    return name.replace(
+      /\s+(standard|ordinary|altered|incarnate|aria|land|sky|disguised|busted|zen mode|zen|curly|droopy|stretchy|red striped|blue striped|white striped|west sea|east sea|full belly|single strike|rapid strike|ice|hero|teal|coral|combat|blaze|aqua|original|crowned|hangry|amped|low key|midday|midnight|dusk|baile|pom pom|pau|sensu|natural|power construct|family of (four|three)|male|female)$/i,
+      ''
+    ).trim();
   }
 
   playCry(id) {

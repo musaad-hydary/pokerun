@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import random
 import requests
@@ -73,8 +74,20 @@ def get_type_ids(type_name):
         return []
 
 
+_STRIP_FORM = re.compile(
+    r'-(standard|ordinary|altered|incarnate|aria|land|sky|disguised|busted|'
+    r'zen|zen-mode|curly|droopy|stretchy|red-striped|blue-striped|white-striped|'
+    r'west-sea|east-sea|full-belly|male|female|family-of-four|family-of-three|'
+    r'single-strike|rapid-strike|ice|hero|teal|coral|combat|blaze|aqua|'
+    r'original|crowned|hangry|amped|low-key|midday|midnight|dusk|'
+    r'baile|pom-pom|pau|sensu|natural|power-construct|'
+    r'red-meteor|blue-meteor|yellow-meteor|white-meteor)$',
+    re.IGNORECASE
+)
+
 def fmt_name(raw):
-    return raw.replace('-', ' ').title()
+    cleaned = _STRIP_FORM.sub('', raw)
+    return cleaned.replace('-', ' ').title()
 
 
 @app.route('/')
