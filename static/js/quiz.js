@@ -46,7 +46,12 @@ class Quiz {
       numEl.classList.remove('hidden');
       numEl.textContent = `#${String(pokemon.id).padStart(3, '0')}`;
     } else if (mode === 'silhouette') {
-      img.src = pokemon.official_artwork || pokemon.sprite || '';
+      if (sprite_type === 'animated') {
+        img.src = `${ANIMATED_BASE}${pokemon.id}.gif`;
+        img.onerror = () => { img.src = pokemon.official_artwork || pokemon.sprite || ''; img.onerror = null; };
+      } else {
+        img.src = pokemon.official_artwork || pokemon.sprite || '';
+      }
       img.classList.add('silhouette');
     } else {
       if (sprite_type === 'animated') {
