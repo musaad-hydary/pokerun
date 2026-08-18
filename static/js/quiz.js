@@ -105,7 +105,7 @@ class Quiz {
         const btn = document.createElement('button');
         btn.className   = 'choice-btn';
         btn.dataset.id  = choice.id;
-        btn.textContent = `${['A','B','C','D'][i]}  ${choice.name.toUpperCase()}`;
+        btn.textContent = `${['a)','b)','c)','d)'][i]}  ${choice.name.toUpperCase()}`;
         btn.addEventListener('click', () => this._pick(choice, btn));
         grid.appendChild(btn);
       });
