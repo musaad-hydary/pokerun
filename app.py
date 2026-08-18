@@ -6,7 +6,7 @@ from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
-CACHE_DIR = 'cache'
+CACHE_DIR = '/tmp/cache' if os.environ.get('VERCEL') else 'cache'
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 GENERATIONS = {
