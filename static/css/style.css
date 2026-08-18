@@ -1103,22 +1103,26 @@ body {
 /* ── Hint system ── */
 .hint-bar {
   width: 100%;
-  border-top: 1.5px solid #e2e2e2;
-  padding-top: 5px;
-  margin-top: 5px;
+  background: #1a1a1a;
+  border-top: 2px solid #333;
+  border-bottom: 2px solid #333;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
 }
 .hint-bar.hidden { display: none; }
 
 .hint-display {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(5px, 0.7vw, 10px);
-  color: #880000;
-  background: #fff0f0;
+  font-size: clamp(5px, 0.7vw, 9px);
+  color: #ffaaaa;
+  background: rgba(204,0,0,0.18);
   border-left: 3px solid #CC0000;
   padding: 3px 6px;
-  margin-bottom: 5px;
   letter-spacing: 0.5px;
-  line-height: 1.9;
+  line-height: 1.8;
 }
 .hint-display.hidden { display: none; }
 
@@ -1126,30 +1130,33 @@ body {
 
 .hint-btn {
   font-family: 'Press Start 2P', monospace;
-  padding: 5px 8px;
-  background: #111;
-  border: 1.5px solid #444;
+  padding: 6px 10px;
+  background: #2a2a2a;
+  border: 1.5px solid #555;
   color: #e0e0e0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  min-height: 44px;
+  flex: 1;
+  justify-content: center;
   transition: background 0.07s, border-color 0.07s;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
 .hint-btn .hint-label {
-  font-size: clamp(5px, 0.65vw, 9px);
+  font-size: clamp(6px, 0.75vw, 10px);
   letter-spacing: 0.5px;
 }
 .hint-btn .hint-cost {
-  font-size: clamp(4px, 0.5vw, 7px);
+  font-size: clamp(5px, 0.55vw, 8px);
   color: #888;
   letter-spacing: 0.5px;
 }
 .hint-btn:hover:not(:disabled) {
-  background: #2a2a2a;
+  background: #3a3a3a;
   border-color: #ccc;
   color: #fff;
 }
@@ -1569,6 +1576,10 @@ body {
   .bw-battle-bottom { min-height: 96px; }
   .choice-btn { font-size: clamp(7px, 2.5vw, 12px); padding: 10px 8px; }
   .results-grid { grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); }
+  .hint-btn { min-height: 48px; padding: 8px 6px; }
+  .hint-btn .hint-label { font-size: clamp(7px, 2vw, 11px); }
+  .hint-btn .hint-cost  { font-size: clamp(6px, 1.6vw, 9px); }
+  .hint-display { font-size: clamp(6px, 1.8vw, 10px); }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
