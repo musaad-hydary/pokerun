@@ -7,6 +7,122 @@ window.SHINY_CHANCE    = false;
 window.DAILY_MODE      = false;
 window.ROTATED_BG      = false;
 
+// ─── Preferences persistence ──────────────────────────
+const PREFS_KEY = 'pokerun_prefs';
+
+function savePrefs() {
+  try {
+    localStorage.setItem(PREFS_KEY, JSON.stringify({
+      cfg: { ...cfg },
+      flags: {
+        CRIES_ENABLED:  window.CRIES_ENABLED,
+        HINTS_ENABLED:  window.HINTS_ENABLED,
+        SHINY_CHANCE:   window.SHINY_CHANCE,
+        REDUCED_MOTION: window.REDUCED_MOTION,
+        FAST_MODE:      window.FAST_MODE,
+        ROTATED_BG:     window.ROTATED_BG,
+      },
+    }));
+  } catch (_) {}
+}
+
+function loadPrefs() {
+  let prefs;
+  try { prefs = JSON.parse(localStorage.getItem(PREFS_KEY)); } catch { return; }
+  if (!prefs) return;
+
+  const { cfg: saved, flags } = prefs;
+
+  if (saved) {
+    Object.assign(cfg, saved);
+
+    // Btn-groups: set active class on matching button
+    [
+      ['modeGroup',   'mode'],
+      ['answerGroup', 'answer'],
+      ['spriteGroup', 'sprite_type'],
+      ['seasonGroup', 'season'],
+    ].forEach(([groupId, key]) => {
+      const grp = document.getElementById(groupId);
+      if (!grp || saved[key] == null) return;
+      grp.querySelectorAll('[data-val]').forEach(b => {
+        b.classList.toggle('active', b.dataset.val === saved[key]);
+      });
+    });
+
+    // Lives preset/custom
+    if (saved.lives != null) {
+      const grp = document.getElementById('livesGroup');
+      const btn = grp?.querySelector(`[data-val="${saved.lives}"]`);
+      if (btn) {
+        grp.querySelectorAll('[data-val]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      } else if (saved.lives > 0) {
+        document.getElementById('livesCustom').value = saved.lives;
+      }
+    }
+
+    // Timer preset/custom
+    if (saved.timer != null) {
+      const grp = document.getElementById('timerGroup');
+      const btn = grp?.querySelector(`[data-val="${saved.timer}"]`);
+      if (btn) {
+        grp.querySelectorAll('[data-val]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      } else if (saved.timer > 0) {
+        document.getElementById('timerCustom').value = saved.timer;
+      }
+    }
+
+    // Count preset/custom
+    if (saved.count != null) {
+      const grp = document.getElementById('countGroup');
+      const btn = grp?.querySelector(`[data-val="${saved.count}"]`);
+      if (btn) {
+        grp.querySelectorAll('[data-val]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      } else {
+        const cc = document.getElementById('countCustom');
+        if (cc) cc.value = saved.count;
+      }
+    }
+
+    // Order toggle
+    if (saved.order === 'ordered' && orderBtn) orderBtn.classList.add('active');
+
+    // Gen select
+    if (saved.gen) {
+      const gs = document.getElementById('genSelect');
+      if (gs) gs.value = saved.gen;
+    }
+
+    // Type filter select + badge
+    if (saved.type_filter) {
+      const ts = document.getElementById('typeSelect');
+      if (ts) {
+        ts.value = saved.type_filter;
+        ts.dispatchEvent(new Event('change'));
+      }
+    }
+  }
+
+  if (flags) {
+    const apply = (flagName, el, getter = v => v) => {
+      if (flags[flagName] === undefined) return;
+      window[flagName] = flags[flagName];
+      if (!el) return;
+      el.classList.toggle('active', !!window[flagName]);
+      el.textContent = window[flagName] ? 'ON' : 'OFF';
+    };
+    apply('CRIES_ENABLED',  document.getElementById('criesBtn'));
+    apply('HINTS_ENABLED',  document.getElementById('hintsBtn'));
+    apply('SHINY_CHANCE',   document.getElementById('shinyBtn'));
+    apply('REDUCED_MOTION', document.getElementById('reduceMotionBtn'));
+    apply('FAST_MODE',      document.getElementById('fastModeBtn'));
+    apply('ROTATED_BG',     document.getElementById('rotatedBgBtn'));
+  }
+}
+
 // ─── All-time stats ───────────────────────────────────
 const ALLTIME_KEY = 'pokerun_alltime';
 function getAllTimeStats() {
@@ -154,6 +270,7 @@ function setupGroup(groupId, key) {
       grp.querySelectorAll('[data-val]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       if (key) cfg[key] = btn.dataset.val;
+      savePrefs();
     });
   });
 }
@@ -166,7 +283,7 @@ setupGroup('seasonGroup', 'season');
 // Lives: visual toggle via setupGroup + number coercion
 setupGroup('livesGroup', '_lives');
 document.getElementById('livesGroup').querySelectorAll('[data-val]').forEach(btn => {
-  btn.addEventListener('click', () => { cfg.lives = parseInt(btn.dataset.val) || 0; });
+  btn.addEventListener('click', () => { cfg.lives = parseInt(btn.dataset.val) || 0; savePrefs(); });
 });
 
 // Timer: visual toggle via setupGroup + number coercion
@@ -175,6 +292,7 @@ document.getElementById('timerGroup').querySelectorAll('[data-val]').forEach(btn
   btn.addEventListener('click', () => {
     cfg.timer = parseInt(btn.dataset.val) || 0;
     document.getElementById('timerCustom').value = '';
+    savePrefs();
   });
 });
 
@@ -189,6 +307,7 @@ timerCustom.addEventListener('input', () => {
     const def = document.getElementById('timerGroup').querySelector('[data-val="0"]');
     if (def) { def.classList.add('active'); cfg.timer = 0; }
   }
+  savePrefs();
 });
 
 // ── Lives custom input ─────────────────────────────────
@@ -202,6 +321,7 @@ livesCustom.addEventListener('input', () => {
     const def = document.getElementById('livesGroup').querySelector('[data-val="0"]');
     if (def) { def.classList.add('active'); cfg.lives = 0; }
   }
+  savePrefs();
 });
 
 // ── ORDER: single toggle ───────────────────────────────
@@ -210,6 +330,7 @@ if (orderBtn) {
   orderBtn.addEventListener('click', () => {
     const isActive = orderBtn.classList.toggle('active');
     cfg.order = isActive ? 'ordered' : 'random';
+    savePrefs();
   });
 }
 
@@ -223,6 +344,7 @@ countGroup.querySelectorAll('[data-val]').forEach(btn => {
     btn.classList.add('active');
     cfg.count = parseInt(btn.dataset.val) || 0;
     countCustom.value = '';
+    savePrefs();
   });
 });
 
@@ -235,11 +357,13 @@ countCustom.addEventListener('input', () => {
     const def = countGroup.querySelector('[data-val="10"]');
     if (def) { def.classList.add('active'); cfg.count = 10; }
   }
+  savePrefs();
 });
 
 // ── GENERATION ────────────────────────────────────────
 document.getElementById('genSelect').addEventListener('change', e => {
   cfg.gen = e.target.value;
+  savePrefs();
 });
 
 // ── TYPE FILTER + badge preview ───────────────────────
@@ -266,6 +390,7 @@ typeSelect.addEventListener('change', e => {
     typeBadge.style.textShadow    = LIGHT_TYPES.has(cfg.type_filter) ? 'none' : '1px 1px 0 rgba(0,0,0,0.4)';
     typeBadge.classList.add('visible');
   }
+  savePrefs();
 });
 
 // ── REDUCE FLASH / MOTION toggle ──────────────────────
@@ -274,6 +399,7 @@ reduceMotionBtn.addEventListener('click', () => {
   window.REDUCED_MOTION = !window.REDUCED_MOTION;
   reduceMotionBtn.classList.toggle('active', window.REDUCED_MOTION);
   reduceMotionBtn.textContent = window.REDUCED_MOTION ? 'ON' : 'OFF';
+  savePrefs();
 });
 
 const fastModeBtn = document.getElementById('fastModeBtn');
@@ -281,6 +407,7 @@ fastModeBtn.addEventListener('click', () => {
   window.FAST_MODE = !window.FAST_MODE;
   fastModeBtn.classList.toggle('active', window.FAST_MODE);
   fastModeBtn.textContent = window.FAST_MODE ? 'ON' : 'OFF';
+  savePrefs();
 });
 
 // ── Cries toggle ──────────────────────────────────────
@@ -289,6 +416,7 @@ criesBtn.addEventListener('click', () => {
   window.CRIES_ENABLED = !window.CRIES_ENABLED;
   criesBtn.classList.toggle('active', window.CRIES_ENABLED);
   criesBtn.textContent = window.CRIES_ENABLED ? 'ON' : 'OFF';
+  savePrefs();
 });
 
 // ── Hints toggle ──────────────────────────────────────
@@ -297,6 +425,7 @@ hintsBtn.addEventListener('click', () => {
   window.HINTS_ENABLED = !window.HINTS_ENABLED;
   hintsBtn.classList.toggle('active', window.HINTS_ENABLED);
   hintsBtn.textContent = window.HINTS_ENABLED ? 'ON' : 'OFF';
+  savePrefs();
 });
 
 const shinyBtn = document.getElementById('shinyBtn');
@@ -304,6 +433,7 @@ shinyBtn.addEventListener('click', () => {
   window.SHINY_CHANCE = !window.SHINY_CHANCE;
   shinyBtn.classList.toggle('active', window.SHINY_CHANCE);
   shinyBtn.textContent = window.SHINY_CHANCE ? 'ON' : 'OFF';
+  savePrefs();
 });
 
 const hidePauseBtn = document.getElementById('hidePauseBtn');
@@ -313,6 +443,7 @@ hidePauseBtn.addEventListener('click', () => {
   document.getElementById('pauseBtn').style.display = newOn ? '' : 'none';
   hidePauseBtn.classList.toggle('active', newOn);
   hidePauseBtn.textContent = newOn ? 'ON' : 'OFF';
+  savePrefs();
 });
 
 const rotatedBgBtn = document.getElementById('rotatedBgBtn');
@@ -321,6 +452,7 @@ rotatedBgBtn.addEventListener('click', () => {
   rotatedBgBtn.classList.toggle('active', window.ROTATED_BG);
   rotatedBgBtn.textContent = window.ROTATED_BG ? 'ON' : 'OFF';
   sizeGameWrap();
+  savePrefs();
 });
 
 // ── TRAINER SHOP ──────────────────────────────────────
@@ -636,3 +768,5 @@ function sizeGameWrap() {
 if (window.visualViewport) window.visualViewport.addEventListener('resize', sizeGameWrap);
 window.addEventListener('resize', sizeGameWrap);
 sizeGameWrap();
+
+loadPrefs();
