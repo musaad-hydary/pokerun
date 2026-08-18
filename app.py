@@ -2,7 +2,7 @@ import os
 import json
 import random
 import requests
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 app = Flask(__name__)
 
@@ -80,6 +80,10 @@ def fmt_name(raw):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/sw.js')
+def service_worker():
+    return send_from_directory('static', 'sw.js', mimetype='application/javascript')
 
 
 @app.route('/api/generations')

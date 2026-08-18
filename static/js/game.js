@@ -17,7 +17,6 @@ function wToS(wx, Z) {
 
 // ── Season themes ─────────────────────────────────────
 const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
-const ROTATE_ENVS = ['beach', 'storm', 'volcano', 'fog', 'cave', 'ultra'];
 
 const SEASON = {
   spring: {
@@ -827,7 +826,6 @@ class Game {
     this._todIdx       = 0;
     this._seasonCount  = 0;
     this._seasonTarget = 3 + Math.floor(Math.random() * 3);
-    this._rotateIdx    = 0;
 
     this._raf = null; this._last = null;
   }
@@ -837,18 +835,14 @@ class Game {
   async loadQueue() {
     const s = this.settings.season;
     const isSeasonal = (s === 'seasonal');
-    const isRotate   = (s === 'rotate');
     if (isSeasonal) {
       this._seasonIdx = Math.floor(Math.random() * SEASONS.length);
       this._todIdx    = 0;
       this.seasonName = SEASONS[this._seasonIdx];
-    } else if (isRotate) {
-      this._rotateIdx = 0;
-      this.seasonName = ROTATE_ENVS[0];
     } else {
       this.seasonName = s || 'summer';
     }
-    this.terrain = new Terrain(this.seasonName, (isSeasonal || isRotate) ? TOD_ORDER[0] : 'day');
+    this.terrain = new Terrain(this.seasonName, isSeasonal ? TOD_ORDER[0] : 'day');
     this.trainer.setSkin(this.settings.trainer_src, this.settings.trainer_cell, this.settings.trainer_row);
 
     const el = document.getElementById('seasonLabel');
@@ -967,17 +961,6 @@ class Game {
       }
     }
 
-    // Rotate: advance to next environment every question
-    if (this.settings.season === 'rotate' && this.terrain) {
-      this._rotateIdx = (this._rotateIdx + 1) % ROTATE_ENVS.length;
-      this.seasonName = ROTATE_ENVS[this._rotateIdx];
-      this.terrain.changeSeason(this.seasonName, 'day');
-      const el = document.getElementById('seasonLabel');
-      if (el) {
-        el.textContent = this.seasonName.toUpperCase();
-        el.classList.remove('hidden');
-      }
-    }
 
     this.state = 'ENCOUNTER';
     this.trainer.paused = true;

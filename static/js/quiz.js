@@ -16,8 +16,9 @@ class Quiz {
     document.addEventListener('hideQuiz', () => this._hide());
     document.addEventListener('gameOver', e => this._showResults(e.detail));
 
-    document.getElementById('hintLetter').addEventListener('click',   () => this._useHint('letter'));
-    document.getElementById('hintType').addEventListener('click',     () => this._useHint('type'));
+    document.getElementById('hintLetter').addEventListener('click',  () => this._useHint('letter'));
+    document.getElementById('hintType').addEventListener('click',    () => this._useHint('type'));
+    document.getElementById('hintLength').addEventListener('click',  () => this._useHint('length'));
     document.getElementById('cryReplayBtn').addEventListener('click', () => this.playCry(this.pokemon?.id));
   }
 
@@ -101,6 +102,9 @@ class Quiz {
       hintLetter.classList.remove('used');
       hintType.disabled = false;
       hintType.classList.remove('used');
+      const hintLength = document.getElementById('hintLength');
+      hintLength.disabled = false;
+      hintLength.classList.remove('used');
     } else {
       hintBar.classList.add('hidden');
     }
@@ -220,6 +224,16 @@ class Quiz {
       hintDisplay.classList.remove('hidden');
       document.getElementById('hintType').disabled = true;
       if (game) game.applyHintCost(25);
+    } else if (type === 'length') {
+      const clean = this._cleanName(this.pokemon.name);
+      const masked = clean.replace(/[a-zA-Z0-9]/g, '?').toUpperCase();
+      document.getElementById('bwPokeName').textContent = masked;
+      hintDisplay.textContent = hintDisplay.textContent
+        ? hintDisplay.textContent + `  |  ${clean.length} LETTERS`
+        : `${clean.length} LETTERS`;
+      hintDisplay.classList.remove('hidden');
+      document.getElementById('hintLength').disabled = true;
+      if (game) game.applyHintCost(15);
     }
   }
 

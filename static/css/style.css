@@ -162,6 +162,11 @@ body {
   border: 2.5px solid rgba(255,255,255,0.85);
   position: relative;
   flex-shrink: 0;
+  animation: pokeball-spin 3s linear infinite;
+}
+@keyframes pokeball-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 .mp-pokeball::before {
   content: '';

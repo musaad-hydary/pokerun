@@ -290,15 +290,6 @@
                     AUTO · SEASONAL
                   </button>
                 </div>
-                <div class="env-row" style="grid-template-columns: 1fr">
-                  <button
-                    class="env-btn env-btn-auto"
-                    data-val="rotate"
-                    style="background: linear-gradient(90deg, #44bbd8 0%, #e8922e 20%, #a0c8e0 40%, #c03020 60%, #6618bb 100%);"
-                  >
-                    AUTO · ROTATE SPECIAL
-                  </button>
-                </div>
                 <div class="env-category-label">SEASONS</div>
                 <div class="env-row">
                   <button
@@ -584,6 +575,10 @@
                     <span class="hint-label">TYPE</span>
                     <span class="hint-cost">-25 PTS</span>
                   </button>
+                  <button class="hint-btn" id="hintLength">
+                    <span class="hint-label">LENGTH</span>
+                    <span class="hint-cost">-15 PTS</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -646,5 +641,10 @@
     <script src="/static/js/share.js"></script>
     <script src="/static/js/confetti.js"></script>
     <script src="/static/js/main.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
   </body>
 </html>
