@@ -233,7 +233,7 @@ class Quiz {
         : `${clean.length} LETTERS`;
       hintDisplay.classList.remove('hidden');
       document.getElementById('hintLength').disabled = true;
-      if (game) game.applyHintCost(15);
+      if (game) game.applyHintCost(50);
     }
   }
 
