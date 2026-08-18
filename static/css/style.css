@@ -69,8 +69,14 @@ body {
 }
 .mp-stats-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
-.mp-shop-btn {
+.mp-header-btns {
   margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mp-shop-btn {
   background: #fff;
   color: #CC0000;
   border-color: #fff;
