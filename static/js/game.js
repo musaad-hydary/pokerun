@@ -361,6 +361,8 @@ class Terrain {
       this._ground(ctx);
       this._ultraPath(ctx);
       this._ultraPortals(ctx);
+      [...this.rocks].sort((a, b) => b.Z - a.Z)
+        .forEach((r, i) => this._ultraRock(ctx, r, i));
     } else {
       this._mountains(ctx);
       this._ground(ctx);
@@ -415,6 +417,30 @@ class Terrain {
       ctx.fillRect(pos.sx - hw, pos.sy - rh + dy, hw * 2, 1);
     }
     ctx.fillStyle = th.mtnSnow;
+    ctx.fillRect(pos.sx - Math.round(rw*0.35), pos.sy - rh, Math.round(rw*0.7), 1);
+  }
+
+  // ── Ultra Space: rainbow crystal rocks ──────────────
+  _ultraRock(ctx, r, idx) {
+    const pos = wToS(r.wx, r.Z);
+    if (pos.sy < HY || pos.sy > VH) return;
+    const RAINBOW = ['#FF0055','#FF7700','#FFEE00','#00FF88','#00AAFF','#CC00FF','#FF00BB'];
+    const PURPLE  = ['#4400AA','#6600CC','#220066','#5500BB','#330088'];
+    const rw = Math.max(2, Math.round(14 * pos.t * r.hm));
+    const rh = Math.max(2, Math.round(12 * pos.t * r.hm));
+    const hue = (idx * 2.1 + this.animTime * 0.6) % RAINBOW.length;
+    const col0 = RAINBOW[Math.floor(hue) % RAINBOW.length];
+    const col1 = RAINBOW[(Math.floor(hue) + 1) % RAINBOW.length];
+    const mainCol = lerpColor(col0, col1, hue % 1);
+    const shadCol = PURPLE[idx % PURPLE.length];
+    for (let dy = 0; dy < rh; dy++) {
+      const tv = dy / rh;
+      const hw = Math.round(rw * Math.sqrt(Math.max(0, 1 - (2*tv - 1)**2)));
+      if (hw <= 0) continue;
+      ctx.fillStyle = tv < 0.45 ? mainCol : shadCol;
+      ctx.fillRect(pos.sx - hw, pos.sy - rh + dy, hw * 2, 1);
+    }
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(pos.sx - Math.round(rw*0.35), pos.sy - rh, Math.round(rw*0.7), 1);
   }
 
