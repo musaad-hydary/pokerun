@@ -176,11 +176,13 @@ async function shareResults(data) {
 
       const POKERUN_URL = 'https://pokerun-theta.vercel.app/';
       const shareText = data.isDaily
-        ? `PokéRun Daily — ${data.correct}/${data.total} correct, ${data.score} pts. Can you beat it? ${POKERUN_URL}`
-        : `PokéRun — ${data.correct}/${data.total} correct, ${data.score} pts. Try it yourself: ${POKERUN_URL}`;
+        ? `PokéRun Daily - ${data.correct}/${data.total} correct, ${data.score} pts. Can you beat it? ${POKERUN_URL}`
+        : `PokéRun - ${data.correct}/${data.total} correct, ${data.score} pts. Try it yourself: ${POKERUN_URL}`;
 
-      // 1. Native share (mobile)
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+      // 1. Native share — mobile only to avoid double-trigger on macOS Chrome
+      if (isMobile && navigator.share && navigator.canShare?.({ files: [file] })) {
         try {
           await navigator.share({
             title: 'PokéRun Results',
@@ -192,10 +194,13 @@ async function shareResults(data) {
         } catch (_) {}
       }
 
-      // 2. Clipboard (desktop Chrome/Edge)
+      // 2. Clipboard — image + text so pasting in a text field includes the link
       if (navigator.clipboard?.write) {
         try {
-          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          await navigator.clipboard.write([new ClipboardItem({
+            'image/png':  blob,
+            'text/plain': new Blob([shareText], { type: 'text/plain' }),
+          })]);
           resolve('copied'); return;
         } catch (_) {}
       }
