@@ -174,12 +174,18 @@ async function shareResults(data) {
 
       const file = new File([blob], 'pokerun.png', { type: 'image/png' });
 
+      const POKERUN_URL = 'https://pokerun-theta.vercel.app/';
+      const shareText = data.isDaily
+        ? `PokéRun Daily — ${data.correct}/${data.total} correct, ${data.score} pts. Can you beat it? ${POKERUN_URL}`
+        : `PokéRun — ${data.correct}/${data.total} correct, ${data.score} pts. Try it yourself: ${POKERUN_URL}`;
+
       // 1. Native share (mobile)
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         try {
           await navigator.share({
             title: 'PokéRun Results',
-            text:  `Score: ${data.score} | Streak: ${data.bestStreak} | ${data.correct}/${data.total}`,
+            text:  shareText,
+            url:   POKERUN_URL,
             files: [file],
           });
           resolve('shared'); return;
