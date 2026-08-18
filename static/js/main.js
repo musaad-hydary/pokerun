@@ -5,6 +5,63 @@ window.CRIES_ENABLED   = true;
 window.HINTS_ENABLED   = false;
 window.DAILY_MODE      = false;
 
+// ─── All-time stats ───────────────────────────────────
+const ALLTIME_KEY = 'pokerun_alltime';
+function getAllTimeStats() {
+  try { return JSON.parse(localStorage.getItem(ALLTIME_KEY)) || {}; } catch { return {}; }
+}
+function updateAllTimeStats({ score, correct, total, bestStreak }) {
+  const s = getAllTimeStats();
+  s.gamesPlayed     = (s.gamesPlayed     || 0) + 1;
+  s.totalQuestions  = (s.totalQuestions  || 0) + total;
+  s.totalCorrect    = (s.totalCorrect    || 0) + correct;
+  s.bestScore       = Math.max(s.bestScore   || 0, score);
+  s.bestStreak      = Math.max(s.bestStreak  || 0, bestStreak);
+  s.perfectRuns     = (s.perfectRuns     || 0) + (correct === total && total > 0 ? 1 : 0);
+  localStorage.setItem(ALLTIME_KEY, JSON.stringify(s));
+}
+function renderStatsModal() {
+  const s   = getAllTimeStats();
+  const acc = s.totalQuestions ? Math.round(s.totalCorrect / s.totalQuestions * 100) : 0;
+  document.getElementById('statsBody').innerHTML = [
+    ['GAMES PLAYED',        s.gamesPlayed    || 0],
+    ['ACCURACY',            acc + '%'],
+    ['BEST SCORE',          s.bestScore      || 0],
+    ['BEST STREAK',         s.bestStreak     || 0],
+    ['PERFECT RUNS',        s.perfectRuns    || 0],
+    ['QUESTIONS ANSWERED',  s.totalQuestions || 0],
+  ].map(([k, v]) =>
+    `<div class="stats-row"><span class="stats-key">${k}</span><span class="stats-val">${v}</span></div>`
+  ).join('');
+}
+
+// ─── Daily streak helpers ─────────────────────────────
+const STREAK_KEY = 'pokerun_streak';
+function getDailyStreak() {
+  try { return JSON.parse(localStorage.getItem(STREAK_KEY)) || {}; } catch { return {}; }
+}
+function updateDailyStreakCounter() {
+  const today     = _dailyToday();
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const s         = getDailyStreak();
+  if (s.lastDate === today) return;
+  s.current = s.lastDate === yesterday ? (s.current || 0) + 1 : 1;
+  s.best    = Math.max(s.best || 0, s.current);
+  s.lastDate = today;
+  localStorage.setItem(STREAK_KEY, JSON.stringify(s));
+}
+function updateDailyStreakUI() {
+  const el = document.getElementById('dailyStreak');
+  if (!el) return;
+  const s = getDailyStreak();
+  if (s.current >= 2) {
+    el.textContent = `${s.current} DAY STREAK`;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+  }
+}
+
 // ─── Daily challenge helpers ──────────────────────────
 const DAILY_KEY = 'pokerun_daily';
 function _dailyToday() { return new Date().toISOString().slice(0, 10); }
@@ -302,6 +359,17 @@ function buildShop() {
   });
 }
 
+document.getElementById('statsBtn').addEventListener('click', () => {
+  renderStatsModal();
+  document.getElementById('statsModal').classList.remove('hidden');
+});
+document.getElementById('statsClose').addEventListener('click', () => {
+  document.getElementById('statsModal').classList.add('hidden');
+});
+document.getElementById('statsModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.add('hidden');
+});
+
 document.getElementById('shopBtn').addEventListener('click', () => {
   buildShop();
   document.getElementById('shopModal').classList.remove('hidden');
@@ -362,12 +430,22 @@ let _lastGameData = null;
 document.addEventListener('gameOver', e => {
   _lastGameData = { ...e.detail, isDaily: !!window.DAILY_MODE };
   const isDaily = !!window.DAILY_MODE;
+
+  updateAllTimeStats(e.detail);
+
   if (isDaily) {
     saveDailyResult(e.detail);
+    updateDailyStreakCounter();
     window.DAILY_MODE     = false;
     window.REDUCED_MOTION = false;
     updateDailyUI();
+    updateDailyStreakUI();
   }
+
+  if (e.detail.correct === e.detail.total && e.detail.total > 0) {
+    setTimeout(launchConfetti, 400);
+  }
+
   document.getElementById('rsPlayAgainBtn').classList.toggle('hidden', isDaily);
   document.getElementById('rsTomorrowMsg').classList.toggle('hidden', !isDaily);
 });
@@ -421,6 +499,7 @@ fetch('/api/daily')
       }).toUpperCase();
     }
     updateDailyUI();
+    updateDailyStreakUI();
   })
   .catch(() => {
     const btn = document.getElementById('dailyStartBtn');

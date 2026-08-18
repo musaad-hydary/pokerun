@@ -8,6 +8,7 @@ class Quiz {
     this.answered      = false;
     this._timerTimeout = null;
     this._timerInterval= null;
+    this._keyHandler   = null;
 
     document.addEventListener('showQuiz', e => this._show(e.detail));
     document.addEventListener('hideQuiz', () => this._hide());
@@ -119,6 +120,18 @@ class Quiz {
     // ── Show overlay ──────────────────────────────────
     const overlay = document.getElementById('quizOverlay');
     overlay.classList.remove('hidden', 'slide-out');
+
+    // ── Keyboard shortcuts (1-4 for MC) ───────────────
+    if (this._keyHandler) document.removeEventListener('keydown', this._keyHandler);
+    this._keyHandler = e => {
+      if (this.answered) return;
+      const idx = { '1': 0, '2': 1, '3': 2, '4': 3 }[e.key];
+      if (idx !== undefined) {
+        const btns = document.querySelectorAll('.choice-btn');
+        if (btns[idx]) btns[idx].click();
+      }
+    };
+    document.addEventListener('keydown', this._keyHandler);
 
     // ── Timer ─────────────────────────────────────────
     this._startTimer(timer || 0);
@@ -322,6 +335,10 @@ class Quiz {
   }
 
   _hide() {
+    if (this._keyHandler) {
+      document.removeEventListener('keydown', this._keyHandler);
+      this._keyHandler = null;
+    }
     const overlay = document.getElementById('quizOverlay');
     document.getElementById('resultBanner').classList.add('hidden');
     this._stopTimer();

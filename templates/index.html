@@ -15,6 +15,9 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="manifest" href="/static/manifest.json" />
+    <meta name="theme-color" content="#CC0000" />
+    <link rel="apple-touch-icon" href="/static/icons/icon.svg" />
   </head>
   <body>
     <!-- ══ MENU ══════════════════════════════════════════ -->
@@ -26,6 +29,7 @@
             <span class="mp-title">POKERUN</span>
             <span class="mp-subtitle">POKEDEX QUIZ</span>
           </div>
+          <button class="pxbtn mp-stats-btn" id="statsBtn">STATS</button>
           <button class="pxbtn mp-shop-btn" id="shopBtn" title="Trainer Select">
             TRAINER
           </button>
@@ -46,6 +50,7 @@
               <span class="daily-title">TODAY'S CHALLENGE</span>
               <span class="daily-date" id="dailyDate">—</span>
             </div>
+            <div class="daily-streak hidden" id="dailyStreak"></div>
 
             <div class="daily-rules">
               <span class="daily-rule">SILHOUETTE</span>
@@ -606,10 +611,22 @@
       <!-- /game-wrap -->
     </div>
 
+    <!-- ── STATS MODAL ── -->
+    <div class="stats-modal hidden" id="statsModal">
+      <div class="stats-panel">
+        <div class="stats-header">
+          <span class="stats-title">ALL-TIME STATS</span>
+          <button class="stats-close" id="statsClose">✕</button>
+        </div>
+        <div class="stats-body" id="statsBody"></div>
+      </div>
+    </div>
+
     <script src="/static/js/api.js"></script>
     <script src="/static/js/game.js"></script>
     <script src="/static/js/quiz.js"></script>
     <script src="/static/js/share.js"></script>
+    <script src="/static/js/confetti.js"></script>
     <script src="/static/js/main.js"></script>
   </body>
 </html>
