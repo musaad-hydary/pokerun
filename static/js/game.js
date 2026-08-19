@@ -106,12 +106,12 @@ const SEASON = {
     renderMode: 'cave',
   },
   ultra: {
-    skyTop:    '#080014', skyHor: '#1A003A',
-    grass:     '#0C001E', grassD: '#070014',
-    path:      '#100048', pathLine: '#180060',
-    treeDark:  '#06000E', treeMid:  '#0A0018', treeLight: '#100028',
-    mtnMain:   '#0A0030', mtnShd:   '#060020', mtnSnow:   '#6010FF',
-    cloud:     '#0C0028',
+    skyTop:    '#100028', skyHor: '#280060',
+    grass:     '#180040', grassD: '#0E0028',
+    path:      '#1C0078', pathLine: '#2E00AA',
+    treeDark:  '#0C0022', treeMid:  '#160038', treeLight: '#1E004E',
+    mtnMain:   '#160050', mtnShd:   '#0C0038', mtnSnow:   '#8833EE',
+    cloud:     '#160040',
     particle:  'portal',
     fixed:     true,
     renderMode: 'ultra',
@@ -425,7 +425,7 @@ class Terrain {
     const pos = wToS(r.wx, r.Z);
     if (pos.sy < HY || pos.sy > VH) return;
     const RAINBOW = ['#FF0055','#FF7700','#FFEE00','#00FF88','#00AAFF','#CC00FF','#FF00BB'];
-    const PURPLE  = ['#4400AA','#6600CC','#220066','#5500BB','#330088'];
+    const PURPLE  = ['#7700FF','#9922FF','#5500DD','#8833EE','#6611CC'];
     const rw = Math.max(2, Math.round(14 * pos.t * r.hm));
     const rh = Math.max(2, Math.round(12 * pos.t * r.hm));
     const hue = (idx * 2.1 + this.animTime * 0.6) % RAINBOW.length;
