@@ -291,7 +291,6 @@ body {
   margin-bottom: 10px;
   padding: 8px 0;
   border-top: 1px solid #e0e0d8;
-  border-bottom: 1px solid #e0e0d8;
 }
 .daily-result.visible { display: block; }
 .daily-stats {
@@ -302,6 +301,7 @@ body {
   font-size: clamp(8px, 0.9vw, 11px);
   color: #333;
 }
+.daily-stats .daily-share-btn { margin-left: auto; }
 .daily-stat-sep { color: #ccc; }
 .daily-share-btn {
   background: #1565C0;
@@ -311,7 +311,6 @@ body {
   padding: 4px 10px;
   min-height: 0;
   white-space: nowrap;
-  vertical-align: middle;
 }
 .daily-share-btn:hover { background: #1976D2; }
 .daily-share-btn:active { transform: translate(1px,1px); }
