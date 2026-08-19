@@ -1016,7 +1016,7 @@ class Game {
       ]);
       this.currentPokemon = pokemon;
       const answerMode = this.settings.answer === 'mixed'
-        ? (this.qIdx % 2 === 0 ? 'mc' : 'typed')
+        ? ['mc', 'typed', 'true_false'][Math.floor(Math.random() * 3)]
         : this.settings.answer;
 
       let tfName = null, tfCorrect = false;
