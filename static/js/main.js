@@ -233,9 +233,8 @@ function updateStartBtn() {
 }
 
 function updateDailyUI() {
-  const state    = getDailyState();
-  const result   = document.getElementById('dailyResult');
-  const shareBtn = document.getElementById('dailyShareBtn');
+  const state  = getDailyState();
+  const result = document.getElementById('dailyResult');
   if (state.played) {
     result.innerHTML = `
       <div class="daily-stats">
@@ -244,13 +243,14 @@ function updateDailyUI() {
         <span>${state.correct}/${state.total} CORRECT</span>
         <span class="daily-stat-sep">·</span>
         <span>${state.bestStreak || 0} STREAK</span>
+        <span class="daily-stat-sep">·</span>
+        <button class="pxbtn daily-share-btn" id="dailyShareBtn">SHARE</button>
       </div>`;
     result.classList.add('visible');
-    if (shareBtn) shareBtn.classList.remove('hidden');
+    document.getElementById('dailyShareBtn').addEventListener('click', handleDailyShare);
   } else {
     result.classList.remove('visible');
     result.innerHTML = '';
-    if (shareBtn) shareBtn.classList.add('hidden');
   }
   updateStartBtn();
 }
@@ -702,10 +702,11 @@ fetch('/api/daily')
     if (btn && getActiveTab() === 'daily') { btn.textContent = 'UNAVAILABLE'; btn.disabled = true; }
   });
 
-document.getElementById('dailyShareBtn').addEventListener('click', async () => {
+async function handleDailyShare() {
   const state = getDailyState();
   if (!state.played || !state.results) return;
   const btn = document.getElementById('dailyShareBtn');
+  if (!btn) return;
   const orig = btn.textContent;
   btn.textContent = 'GENERATING...';
   btn.disabled = true;
@@ -723,7 +724,7 @@ document.getElementById('dailyShareBtn').addEventListener('click', async () => {
     btn.textContent = 'ERROR';
   }
   setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2500);
-});
+}
 
 
 // ─── Canvas / wrap sizing ─────────────────────────────

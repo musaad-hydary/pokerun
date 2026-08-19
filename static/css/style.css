@@ -303,19 +303,15 @@ body {
   color: #333;
 }
 .daily-stat-sep { color: #ccc; }
-.daily-actions {
-  display: flex;
-  gap: 8px;
-}
 .daily-share-btn {
-  flex: 1;
   background: #1565C0;
   border-color: #0d47a1;
   color: #fff;
-  font-size: clamp(9px, 1.1vw, 13px);
-  padding: 13px 16px;
-  min-height: 44px;
+  font-size: clamp(7px, 0.75vw, 9px);
+  padding: 4px 10px;
+  min-height: 0;
   white-space: nowrap;
+  vertical-align: middle;
 }
 .daily-share-btn:hover { background: #1976D2; }
 .daily-share-btn:active { transform: translate(1px,1px); }
