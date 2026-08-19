@@ -22,12 +22,14 @@ class Quiz {
     document.getElementById('cryReplayBtn').addEventListener('click', () => this.playCry(this.pokemon?.id));
   }
 
-  _show({ pokemon, choices, mode, answer, sprite_type, timer, theme }) {
+  _show({ pokemon, choices, mode, answer, sprite_type, timer, theme, tfName, tfCorrect }) {
     this.pokemon     = pokemon;
     this.answered    = false;
     this.mode        = mode;
+    this.answerMode  = answer;
     this.sprite_type = sprite_type;
     this.isShiny     = window.SHINY_CHANCE && Math.random() < 0.1;
+    this.tfCorrect   = tfCorrect;
     this._stopTimer();
 
     document.getElementById('shinyBadge').classList.toggle('hidden', !this.isShiny);
@@ -85,8 +87,9 @@ class Quiz {
 
     // ── Question text ────────────────────────────────
     document.getElementById('quizQ').textContent =
-      mode === 'number_only' ? 'NAME THIS POKÉMON!' :
-      mode === 'cry_only'    ? 'NAME THAT CRY!'     :
+      mode === 'number_only'     ? 'NAME THIS POKÉMON!' :
+      mode === 'cry_only'        ? 'NAME THAT CRY!'     :
+      answer === 'true_false'    ? 'TRUE OR FALSE?'     :
       "WHO'S THAT POKÉMON?";
 
     // ── Hint bar ─────────────────────────────────────
@@ -109,6 +112,11 @@ class Quiz {
       hintBar.classList.add('hidden');
     }
 
+    // ── Answer prompt (fill mask / T/F name) ─────────
+    const answerPrompt = document.getElementById('answerPrompt');
+    answerPrompt.textContent = '';
+    answerPrompt.classList.add('hidden');
+
     // ── Answer input ─────────────────────────────────
     const grid = document.getElementById('choicesGrid');
     grid.innerHTML = '';
@@ -116,6 +124,12 @@ class Quiz {
 
     if (answer === 'typed') {
       this._buildTypeInput(grid);
+    } else if (answer === 'true_false') {
+      answerPrompt.textContent = this._cleanName(tfName).toUpperCase();
+      answerPrompt.classList.remove('hidden');
+      answerPrompt.classList.add('tf-name');
+      answerPrompt.classList.remove('fill-mask');
+      this._buildTFInput(grid, tfCorrect);
     } else {
       choices.forEach((choice, i) => {
         const btn = document.createElement('button');
@@ -284,6 +298,43 @@ class Quiz {
     setTimeout(() => document.getElementById('typeInput')?.focus(), 80);
   }
 
+  _buildTFInput(grid, isCorrect) {
+    grid.classList.add('tf-mode');
+    const yes = document.createElement('button');
+    yes.className   = 'choice-btn tf-yes';
+    yes.textContent = 'TRUE';
+    const no = document.createElement('button');
+    no.className   = 'choice-btn tf-no';
+    no.textContent = 'FALSE';
+
+    const handle = (chose) => {
+      if (this.answered) return;
+      this.answered = true;
+      this._stopTimer();
+      const correct = chose === isCorrect;
+
+      yes.disabled = true;
+      no.disabled  = true;
+      if (isCorrect)  yes.classList.add('correct'); else no.classList.add('correct');
+      if (chose && !isCorrect)  yes.classList.add('wrong');
+      if (!chose && isCorrect)  no.classList.add('wrong');
+
+      document.getElementById('bwPokeName').textContent = this._cleanName(this.pokemon.name).toUpperCase();
+      this._revealArtwork();
+      if (window.HINTS_ENABLED) this._showTypes(this.pokemon);
+      const hpBar = document.getElementById('bwHpBar');
+      hpBar.style.width      = correct ? '100%' : '25%';
+      hpBar.style.background = correct ? '#28C828' : '#F82020';
+      this._showResult(correct);
+      if (game) game.submitAnswer(correct);
+    };
+
+    yes.addEventListener('click', () => handle(true));
+    no.addEventListener('click',  () => handle(false));
+    grid.appendChild(yes);
+    grid.appendChild(no);
+  }
+
   _normalize(s) {
     return s.toLowerCase().replace(/[^a-z0-9]/g, '');
   }
@@ -349,12 +400,21 @@ class Quiz {
     this.answered = true;
 
     // Reveal correct on MC
-    document.querySelectorAll('.choice-btn').forEach(b => {
+    document.querySelectorAll('.choice-btn:not(.tf-yes):not(.tf-no)').forEach(b => {
       b.disabled = true;
       if (parseInt(b.dataset.id) === this.pokemon.id) b.classList.add('correct');
     });
 
-    // Mark typed input wrong if open
+    // T/F buttons
+    const yes = document.querySelector('.tf-yes');
+    const no  = document.querySelector('.tf-no');
+    if (yes && no) {
+      yes.disabled = true;
+      no.disabled  = true;
+      if (this.tfCorrect) yes.classList.add('correct'); else no.classList.add('correct');
+    }
+
+    // Mark typed/fill input wrong if open
     const inp = document.getElementById('typeInput');
     const sub = document.getElementById('typeSubmit');
     if (inp) { inp.disabled = true; inp.classList.add('wrong'); }

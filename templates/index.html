@@ -66,9 +66,6 @@
             <div id="dailyResult" class="daily-result"></div>
 
             <div class="daily-actions">
-              <button class="pxbtn daily-play-btn" id="dailyStartBtn" disabled>
-                LOADING...
-              </button>
               <button class="pxbtn daily-share-btn hidden" id="dailyShareBtn">
                 SHARE
               </button>
@@ -107,6 +104,8 @@
                   MULTIPLE CHOICE
                 </button>
                 <button class="pxbtn" data-val="typed">TYPED</button>
+                <button class="pxbtn" data-val="true_false">TRUE / FALSE</button>
+                <button class="pxbtn" data-val="mixed">MIXED</button>
               </div>
             </div>
 
@@ -582,6 +581,7 @@
           <div class="bw-battle-bottom">
             <div class="bw-dialog-box">
               <p id="quizQ" class="bw-dialog-text">WHO'S THAT POKEMON?</p>
+              <div id="answerPrompt" class="answer-prompt hidden"></div>
             </div>
             <div class="bw-move-grid" id="choicesGrid"></div>
           </div>

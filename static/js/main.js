@@ -206,15 +206,37 @@ function saveDailyResult({ score, correct, total, bestStreak, results }) {
     })),
   }));
 }
-function updateDailyUI() {
-  const state     = getDailyState();
-  const btn       = document.getElementById('dailyStartBtn');
-  const result    = document.getElementById('dailyResult');
-  const shareBtn  = document.getElementById('dailyShareBtn');
+function getActiveTab() {
+  const active = document.querySelector('.menu-tab.active');
+  return active ? active.dataset.tab : 'daily';
+}
+
+function updateStartBtn() {
+  const btn = document.getElementById('startBtn');
   if (!btn) return;
+  if (getActiveTab() === 'daily') {
+    const state = getDailyState();
+    if (state.played) {
+      btn.textContent = 'COMPLETED ✓';
+      btn.disabled = true;
+    } else if (!_dailyIds) {
+      btn.textContent = 'LOADING...';
+      btn.disabled = true;
+    } else {
+      btn.textContent = '▶ PLAY TODAY\'S RUN';
+      btn.disabled = false;
+    }
+  } else {
+    btn.textContent = 'START GAME';
+    btn.disabled = false;
+  }
+}
+
+function updateDailyUI() {
+  const state    = getDailyState();
+  const result   = document.getElementById('dailyResult');
+  const shareBtn = document.getElementById('dailyShareBtn');
   if (state.played) {
-    btn.textContent = 'COMPLETED ✓';
-    btn.disabled = true;
     result.innerHTML = `
       <div class="daily-stats">
         <span>${state.score} PTS</span>
@@ -226,12 +248,11 @@ function updateDailyUI() {
     result.classList.add('visible');
     if (shareBtn) shareBtn.classList.remove('hidden');
   } else {
-    btn.textContent = '▶ PLAY TODAY\'S RUN';
-    btn.disabled = false;
     result.classList.remove('visible');
     result.innerHTML = '';
     if (shareBtn) shareBtn.classList.add('hidden');
   }
+  updateStartBtn();
 }
 
 // ─── Settings state ───────────────────────────────────
@@ -258,6 +279,7 @@ document.querySelectorAll('.menu-tab').forEach(tab => {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
     tab.classList.add('active');
     document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
+    updateStartBtn();
   });
 });
 
@@ -551,9 +573,33 @@ function showScreen(id) {
 
 // ─── Start ────────────────────────────────────────────
 document.getElementById('startBtn').addEventListener('click', async () => {
-  showScreen('gameScreen');
-  sizeGameWrap();
-  await initGame({ ...cfg });
+  if (getActiveTab() === 'daily') {
+    if (!_dailyIds || getDailyState().played) return;
+    window.DAILY_MODE     = true;
+    window.REDUCED_MOTION = true;
+    showScreen('gameScreen');
+    sizeGameWrap();
+    await initGame({
+      mode:         'silhouette',
+      answer:       'typed',
+      sprite_type:  'animated',
+      timer:        10,
+      lives:        1,
+      gen:          'all',
+      type_filter:  'all',
+      order:        'ordered',
+      count:        6,
+      season:       'seasonal',
+      fixedQueue:   _dailyIds,
+      trainer_src:  cfg.trainer_src,
+      trainer_cell: cfg.trainer_cell,
+      trainer_row:  cfg.trainer_row,
+    });
+  } else {
+    showScreen('gameScreen');
+    sizeGameWrap();
+    await initGame({ ...cfg });
+  }
 });
 
 // ─── Pause / Resume / Exit ───────────────────────────
@@ -635,6 +681,7 @@ document.getElementById('rsMenuBtn').addEventListener('click', () => {
 
 // ─── Daily challenge ──────────────────────────────────
 let _dailyIds = null;
+updateStartBtn();
 
 fetch('/api/daily')
   .then(r => r.json())
@@ -651,8 +698,8 @@ fetch('/api/daily')
     updateDailyStreakUI();
   })
   .catch(() => {
-    const btn = document.getElementById('dailyStartBtn');
-    if (btn) { btn.textContent = 'UNAVAILABLE'; btn.disabled = true; }
+    const btn = document.getElementById('startBtn');
+    if (btn && getActiveTab() === 'daily') { btn.textContent = 'UNAVAILABLE'; btn.disabled = true; }
   });
 
 document.getElementById('dailyShareBtn').addEventListener('click', async () => {
@@ -678,29 +725,6 @@ document.getElementById('dailyShareBtn').addEventListener('click', async () => {
   setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2500);
 });
 
-document.getElementById('dailyStartBtn').addEventListener('click', async () => {
-  if (!_dailyIds || getDailyState().played) return;
-  window.DAILY_MODE    = true;
-  window.REDUCED_MOTION = true;
-  showScreen('gameScreen');
-  sizeGameWrap();
-  await initGame({
-    mode:         'silhouette',
-    answer:       'typed',
-    sprite_type:  'animated',
-    timer:        10,
-    lives:        1,
-    gen:          'all',
-    type_filter:  'all',
-    order:        'ordered',
-    count:        6,
-    season:       'seasonal',
-    fixedQueue:   _dailyIds,
-    trainer_src:  cfg.trainer_src,
-    trainer_cell: cfg.trainer_cell,
-    trainer_row:  cfg.trainer_row,
-  });
-});
 
 // ─── Canvas / wrap sizing ─────────────────────────────
 function sizeGameWrap() {

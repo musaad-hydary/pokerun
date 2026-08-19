@@ -279,10 +279,12 @@ body {
   color: #444;
   background: #ebebeb;
   border: 1.5px solid #d4d4d4;
-  padding: 4px 9px;
+  padding: 4px 6px;
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.4px;
+  flex: 1;
+  text-align: center;
 }
 .daily-result {
   display: none;
@@ -305,27 +307,8 @@ body {
   display: flex;
   gap: 8px;
 }
-.daily-play-btn {
-  flex: 1;
-  background: #111;
-  border-color: #000;
-  color: #fff;
-  font-size: clamp(9px, 1.1vw, 13px);
-  padding: 13px 0;
-  min-height: 44px;
-  letter-spacing: 2px;
-}
-.daily-play-btn:hover:not(:disabled) { background: #2a2a2a; }
-.daily-play-btn:active:not(:disabled) { transform: translate(1px,1px); }
-.daily-play-btn:disabled {
-  background: #999;
-  color: #ccc;
-  cursor: default;
-  border-color: #888;
-  transform: none;
-}
-.daily-play-btn:disabled:hover { background: #999; border-color: #888; }
 .daily-share-btn {
+  flex: 1;
   background: #1565C0;
   border-color: #0d47a1;
   color: #fff;
@@ -341,7 +324,7 @@ body {
 .mp-body {
   padding: 14px 16px 12px;
   overflow-y: auto;
-  flex: 1;
+  max-height: calc(98dvh - 170px);
 }
 .mp-body::-webkit-scrollbar       { width: 4px; }
 .mp-body::-webkit-scrollbar-track { background: transparent; }
@@ -399,10 +382,10 @@ body {
 ──────────────────────────────────────────────────── */
 .pxbtn {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(8px, 0.9vw, 11px);
-  letter-spacing: 1px;
-  padding: 7px 12px;
-  min-height: 34px;
+  font-size: clamp(7px, 0.75vw, 9px);
+  letter-spacing: 0.5px;
+  padding: 6px 10px;
+  min-height: 30px;
   background: #fff;
   color: #333;
   border: 2px solid #999;
@@ -453,8 +436,14 @@ body {
   min-height: 46px;
   letter-spacing: 3px;
 }
-.start-btn:hover  { background: #EE1111; border-color: #AA0000; }
-.start-btn:active { transform: translate(1px,1px); }
+.start-btn:hover:not(:disabled)  { background: #EE1111; border-color: #AA0000; }
+.start-btn:active:not(:disabled) { transform: translate(1px,1px); }
+.start-btn:disabled {
+  background: #999;
+  border-color: #888;
+  color: #ccc;
+  cursor: default;
+}
 
 /* Count custom input */
 .count-custom-input {
@@ -1105,6 +1094,22 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* ── Fill / T/F answer prompt ── */
+.answer-prompt {
+  font-family: 'Press Start 2P', monospace;
+  color: #111;
+  line-height: 1.6;
+  margin-top: 4px;
+  width: 100%;
+  word-break: break-all;
+}
+.answer-prompt.tf-name {
+  font-size: clamp(10px, 1.4vw, 20px);
+  letter-spacing: 1px;
+  color: #CC0000;
+  font-weight: bold;
+}
+
 /* ── Hint system ── */
 .hint-bar {
   width: 100%;
@@ -1197,6 +1202,15 @@ body {
 .choice-btn:hover:not(:disabled) { background: #DDEEFF; border-color: #0044AA; color: #0033AA; }
 .choice-btn.correct { background: #CCFFCC !important; border-color: #009900 !important; color: #006600 !important; }
 .choice-btn.wrong   { background: #FFCCCC !important; border-color: #CC0000 !important; color: #990000 !important; }
+
+/* ── True/False answer mode ── */
+.bw-move-grid.tf-mode .choice-btn {
+  text-align: center;
+  font-size: clamp(10px, 1.5vw, 18px);
+  min-height: 64px;
+  letter-spacing: 2px;
+}
+.tf-yes { border-right: 1px solid #888 !important; }
 
 /* ── Typed answer mode ── */
 .bw-move-grid.typed-mode {

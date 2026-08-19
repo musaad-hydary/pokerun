@@ -1015,15 +1015,33 @@ class Game {
         API.getChoices(pid, this.settings.gen, this.settings.type_filter),
       ]);
       this.currentPokemon = pokemon;
+      const answerMode = this.settings.answer === 'mixed'
+        ? (this.qIdx % 2 === 0 ? 'mc' : 'typed')
+        : this.settings.answer;
+
+      let tfName = null, tfCorrect = false;
+      if (answerMode === 'true_false') {
+        tfCorrect = Math.random() < 0.5;
+        if (tfCorrect) {
+          tfName = pokemon.name;
+        } else {
+          const wrong = choiceData.choices.find(c => c.id !== pokemon.id);
+          tfName = wrong ? wrong.name : pokemon.name;
+          tfCorrect = tfName === pokemon.name;
+        }
+      }
+
       document.dispatchEvent(new CustomEvent('showQuiz', {
         detail: {
           pokemon,
           choices:     choiceData.choices,
           mode:        this.settings.mode,
-          answer:      this.settings.answer,
+          answer:      answerMode,
           sprite_type: this.settings.sprite_type,
           timer:       this.settings.timer,
           theme:       this.terrain ? this.terrain._getTheme() : null,
+          tfName,
+          tfCorrect,
         },
       }));
       this._updateHUD();
