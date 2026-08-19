@@ -243,7 +243,8 @@ function updateDailyUI() {
         <span>${state.correct}/${state.total} CORRECT</span>
         <span class="daily-stat-sep">·</span>
         <span>${state.bestStreak || 0} STREAK</span>
-        <button class="pxbtn daily-share-btn" id="dailyShareBtn">SHARE</button>
+        <span class="daily-stat-sep">·</span>
+        <button class="daily-share-btn" id="dailyShareBtn">SHARE</button>
       </div>`;
     result.classList.add('visible');
     document.getElementById('dailyShareBtn').addEventListener('click', handleDailyShare);

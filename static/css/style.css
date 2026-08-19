@@ -302,16 +302,19 @@ body {
   font-size: clamp(8px, 0.9vw, 11px);
   color: #333;
 }
-.daily-stats .daily-share-btn { margin-left: auto; flex-shrink: 0; }
 .daily-stat-sep { color: #ccc; }
 .daily-share-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 0.9vw, 11px);
   background: #1565C0;
-  border-color: #0d47a1;
+  border: 2px solid #0d47a1;
   color: #fff;
-  font-size: clamp(7px, 0.75vw, 9px);
-  padding: 4px 10px;
-  min-height: 0;
+  padding: 3px 10px;
+  cursor: pointer;
   white-space: nowrap;
+  letter-spacing: 0.5px;
+  flex: 1;
+  text-align: center;
 }
 .daily-share-btn:hover { background: #1976D2; }
 .daily-share-btn:active { transform: translate(1px,1px); }
