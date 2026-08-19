@@ -1329,13 +1329,13 @@ body {
 
 .results-stats-row {
   display: flex;
-  gap: 8px;
-  font-size: clamp(0.32rem, 1.1vw, 0.46rem);
+  gap: 6px;
+  font-size: clamp(7px, 1vw, 10px);
   color: rgba(255,255,255,0.9);
   align-items: center;
 }
-.results-stats-row b { color: #FFD700; margin-left: 3px; }
-.results-stat-sep { color: rgba(255,255,255,0.35); font-size: 0.9em; }
+.results-stats-row b { color: #FFD700; margin-left: 2px; }
+.results-stat-sep { color: rgba(255,255,255,0.6); font-size: 1.1em; margin: 0 1px; }
 
 .results-grid {
   display: grid;
