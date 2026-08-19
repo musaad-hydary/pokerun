@@ -62,11 +62,11 @@ body {
 
 .mp-stats-btn {
   background: transparent;
-  color: rgba(255,255,255,0.8);
-  border-color: rgba(255,255,255,0.4);
-  font-size: clamp(0.22rem, 0.75vw, 0.3rem);
-  padding: 5px 8px;
-  min-height: 26px;
+  color: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.5);
+  font-size: clamp(8px, 0.95vw, 11px);
+  padding: 6px 10px;
+  min-height: 34px;
 }
 .mp-stats-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
@@ -81,9 +81,9 @@ body {
   background: #fff;
   color: #CC0000;
   border-color: #fff;
-  font-size: clamp(0.22rem, 0.75vw, 0.3rem);
-  padding: 5px 8px;
-  min-height: 26px;
+  font-size: clamp(8px, 0.95vw, 11px);
+  padding: 6px 10px;
+  min-height: 34px;
 }
 .mp-shop-btn:hover { background: #ffe8e8; }
 
@@ -197,8 +197,8 @@ body {
 }
 
 .mp-subtitle {
-  font-size: clamp(0.22rem, 0.8vw, 0.28rem);
-  color: rgba(255,255,255,0.72);
+  font-size: clamp(0.3rem, 1vw, 0.38rem);
+  color: rgba(255,255,255,0.75);
   letter-spacing: 3px;
 }
 
@@ -211,9 +211,9 @@ body {
 }
 .menu-tab {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(6px, 0.85vw, 11px);
+  font-size: clamp(8px, 1vw, 12px);
   flex: 1;
-  padding: 11px 4px;
+  padding: 13px 4px;
   background: transparent;
   border: none;
   border-bottom: 3px solid transparent;
@@ -222,6 +222,8 @@ body {
   letter-spacing: 1px;
   transition: color 0.1s;
   margin-bottom: -2px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .menu-tab.active {
   color: #CC0000;
@@ -245,13 +247,13 @@ body {
 }
 .daily-title {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(7px, 1.1vw, 12px);
+  font-size: clamp(9px, 1.3vw, 14px);
   color: #111;
   letter-spacing: 1.5px;
 }
 .daily-date {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(8px, 1.05vw, 10px);
+  font-size: clamp(10px, 1.1vw, 12px);
   font-weight: 700;
   color: #aaa;
   text-transform: uppercase;
@@ -259,7 +261,7 @@ body {
 }
 .daily-streak {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(5px, 0.7vw, 8px);
+  font-size: clamp(9px, 1vw, 12px);
   color: #CC0000;
   letter-spacing: 1px;
   margin-bottom: 10px;
@@ -267,17 +269,20 @@ body {
 .daily-rules {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 14px;
 }
 .daily-rule {
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(4px, 0.48vw, 6px);
-  color: #555;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(9px, 1.05vw, 11px);
+  font-weight: 700;
+  color: #444;
   background: #ebebeb;
-  border: 1.5px solid #d8d8d8;
-  padding: 3px 6px;
+  border: 1.5px solid #d4d4d4;
+  padding: 4px 9px;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 .daily-result {
   display: none;
@@ -292,7 +297,7 @@ body {
   align-items: center;
   gap: 8px;
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(6px, 0.85vw, 9px);
+  font-size: clamp(8px, 0.9vw, 11px);
   color: #333;
 }
 .daily-stat-sep { color: #ccc; }
@@ -305,9 +310,9 @@ body {
   background: #111;
   border-color: #000;
   color: #fff;
-  font-size: clamp(6px, 0.85vw, 10px);
-  padding: 10px 0;
-  min-height: 36px;
+  font-size: clamp(9px, 1.1vw, 13px);
+  padding: 13px 0;
+  min-height: 44px;
   letter-spacing: 2px;
 }
 .daily-play-btn:hover:not(:disabled) { background: #2a2a2a; }
@@ -324,9 +329,9 @@ body {
   background: #1565C0;
   border-color: #0d47a1;
   color: #fff;
-  font-size: clamp(6px, 0.85vw, 10px);
-  padding: 10px 14px;
-  min-height: 36px;
+  font-size: clamp(9px, 1.1vw, 13px);
+  padding: 13px 16px;
+  min-height: 44px;
   white-space: nowrap;
 }
 .daily-share-btn:hover { background: #1976D2; }
@@ -360,7 +365,7 @@ body {
 
 .mp-hint {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(8px, 1.1vw, 10px);
+  font-size: clamp(9px, 1.2vw, 11px);
   color: #aaa;
   margin-top: 5px;
   text-transform: uppercase;
@@ -394,10 +399,10 @@ body {
 ──────────────────────────────────────────────────── */
 .pxbtn {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(5px, 0.7vw, 10px);
+  font-size: clamp(8px, 0.9vw, 11px);
   letter-spacing: 1px;
-  padding: 5px 10px;
-  min-height: 26px;
+  padding: 7px 12px;
+  min-height: 34px;
   background: #fff;
   color: #333;
   border: 2px solid #999;
@@ -443,9 +448,9 @@ body {
   background: #CC0000;
   border-color: #880000;
   color: #fff;
-  font-size: clamp(0.42rem, 1.4vw, 0.55rem);
-  padding: 10px 0;
-  min-height: 40px;
+  font-size: clamp(10px, 1.5vw, 14px);
+  padding: 13px 0;
+  min-height: 46px;
   letter-spacing: 3px;
 }
 .start-btn:hover  { background: #EE1111; border-color: #AA0000; }
@@ -496,7 +501,7 @@ body {
 .mode-card.active { border-color: #CC0000; background: #fff5f5; }
 .mode-card-label {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(5px, 0.72vw, 8.5px);
+  font-size: clamp(8px, 0.9vw, 11px);
   letter-spacing: 0.5px;
   color: #444;
   line-height: 1.4;
@@ -504,10 +509,10 @@ body {
 .mode-card.active .mode-card-label { color: #CC0000; }
 .mode-card-desc {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(8px, 1.15vw, 10px);
+  font-size: clamp(9px, 1.2vw, 11px);
   color: #aaa;
-  font-weight: 500;
-  margin-top: 1px;
+  font-weight: 600;
+  margin-top: 2px;
   text-transform: uppercase;
 }
 
@@ -530,7 +535,7 @@ body {
   border-radius: 3px;
   transition: border-color 0.1s, box-shadow 0.1s;
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(7px, 1.1vw, 10px);
+  font-size: clamp(8px, 1.2vw, 11px);
   font-weight: 800;
   color: #fff;
   text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
@@ -557,7 +562,7 @@ body {
 }
 .env-category-label {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(7px, 1vw, 9px);
+  font-size: clamp(9px, 1.1vw, 11px);
   font-weight: 700;
   color: #bbb;
   letter-spacing: 1.5px;
@@ -585,25 +590,25 @@ body {
 }
 .toggle-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(5px, 0.7vw, 8px);
+  font-size: clamp(8px, 0.9vw, 11px);
   color: #333;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 .toggle-desc {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: clamp(8px, 1.15vw, 10px);
+  font-size: clamp(9px, 1.2vw, 11px);
   color: #aaa;
-  font-weight: 500;
-  margin-top: 1px;
+  font-weight: 600;
+  margin-top: 2px;
   text-transform: uppercase;
 }
 .toggle-btn {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(5px, 0.7vw, 8.5px);
-  padding: 5px 0;
-  width: 56px;
-  min-height: 28px;
+  font-size: clamp(8px, 0.85vw, 10px);
+  padding: 6px 0;
+  width: 60px;
+  min-height: 36px;
   background: #eee;
   color: #aaa;
   border: 2px solid #d0d0d0;
@@ -1324,12 +1329,13 @@ body {
 
 .results-stats-row {
   display: flex;
-  gap: 10px;
-  font-size: clamp(0.28rem, 1vw, 0.38rem);
+  gap: 8px;
+  font-size: clamp(0.32rem, 1.1vw, 0.46rem);
   color: rgba(255,255,255,0.9);
   align-items: center;
 }
 .results-stats-row b { color: #FFD700; margin-left: 3px; }
+.results-stat-sep { color: rgba(255,255,255,0.35); font-size: 0.9em; }
 
 .results-grid {
   display: grid;
