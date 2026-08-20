@@ -1,15 +1,41 @@
 # PokéRun
 
-A Pokédex quiz game built on a 320x180 pixel canvas. Guess Pokémon from their image, silhouette, Pokédex number, or just their cry. Compete against a timer, manage lives, and share your results.
+A Pokédex quiz game built on a 320x180 pixel canvas. Guess Pokémon from their image, silhouette, Pokédex number, or cry.
 
 ## Features
 
-- **4 display modes** — full image, silhouette, number only, or cry only
-- **2 answer modes** — multiple choice or typed
-- **Daily Challenge** — one shared run per day, same Pokémon for everyone, results shareable as a sticker
-- **Generations and type filters** — narrow the pool or go all 1025
-- **Seasonal backgrounds** — environment changes with the real-world season
-- **Animated sprites** — toggleable via the options tab
+**Display modes**
+- Image, silhouette, number only, or cry only
+- Silhouettes pulse with a white glow so they're readable in dark environments
+
+**Answer modes**
+- Multiple choice, typed, true/false, or mixed (random combination of all three per question)
+
+**Daily Challenge**
+- One shared run per day, same 6 Pokémon for everyone, seeded by date on the server
+- Silhouette + typed + 10s timer + 1 life, seasonal environment
+- Results inline on the daily tab with a share button that generates a PNG sticker
+
+**Hint system** (optional, costs points)
+- First letter (-50 pts), type reveal (-25 pts), name length (-50 pts)
+
+**Customization**
+- Generation filter (Gen I-IX or all 1025)
+- Type filter (narrow pool to a single type)
+- Lives, timer, question count, and order (random or sequential)
+- Shiny chance toggle (1-in-10 odds)
+- Animated or still sprites
+
+**Environments (Vibes tab)**
+- Grass, cave, city, beach, snow, sand, forest, night, ultra space
+- Auto-seasonal: picks the right environment for the current real-world season
+- Ultra space has rainbow crystal rocks and a brighter purple sky
+
+**Preferences**
+- All settings persist across sessions via localStorage
+
+**Offline support**
+- Service worker caches all local assets after the first load
 
 ## Running locally
 
@@ -18,31 +44,32 @@ pip install flask requests
 python app.py
 ```
 
-Then open `http://localhost:8765`.
-
-Pokemon data is fetched from [PokéAPI](https://pokeapi.co) and cached locally in a `cache/` folder so repeat runs are fast and offline-capable after the first load.
+Open `http://localhost:8765`. PokéAPI data is fetched on demand and cached in `cache/` so repeat runs are fast.
 
 ## Tech stack
 
-- **Backend** — Python + Flask, one file (`app.py`). Serves the HTML and proxies PokéAPI with local JSON caching.
-- **Frontend** — Vanilla JS, no build step. Canvas 2D at 320x180 virtual resolution scaled up via CSS. Press Start 2P pixel font.
-- **Daily system** — date-seeded shuffle on the server so everyone gets the same 6 Pokémon. One-shot enforced in localStorage.
-- **Share sticker** — generated client-side on a Canvas element, downloaded as a PNG.
+- **Backend** — Python + Flask (`app.py`). Proxies PokéAPI with local JSON caching. Strips variant suffixes from Pokémon names (e.g. "Darmanitan Standard" becomes "Darmanitan").
+- **Frontend** — Vanilla JS, no build step. Canvas 2D at 320x180 virtual resolution scaled via CSS. Press Start 2P pixel font.
+- **Daily system** — date-seeded `random.shuffle` on the server so everyone gets the same queue. One-shot enforced in localStorage.
+- **Share sticker** — generated client-side on a hidden Canvas, exported as a PNG.
+- **Service worker** — cache-first for local assets, network-first for API calls, network-only for external CDN sprites and cries.
 
 ## Deploying to Vercel
 
-Push to GitHub, import the repo on [vercel.com](https://vercel.com), and deploy. The `vercel.json` is already configured. On Vercel the cache writes to `/tmp` instead of `./cache` since the serverless filesystem is read-only.
+Push to GitHub, import on vercel.com, and deploy. `vercel.json` is already configured. Cache writes to `/tmp` on Vercel since the serverless filesystem is read-only.
 
 ## Project structure
 
 ```
-app.py           Flask backend and API routes
-templates/
-  index.html     Single-page app shell
+app.py              Flask backend and API routes
 static/
+  sw.js             Service worker
   css/style.css
   js/
-    main.js      Menu wiring, game start, daily logic
-    game.js      Core quiz engine
-    share.js     Share sticker canvas generation
+    main.js         Menu wiring, tab logic, daily UI, preferences
+    game.js         Canvas engine, terrain, encounter system
+    quiz.js         Quiz overlay, answer modes, hints, timer
+    share.js        Share sticker canvas generation
+templates/
+  index.html        Single-page app shell
 ```
