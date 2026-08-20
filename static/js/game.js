@@ -1150,6 +1150,7 @@ class Game {
         score: this.score, correct: this.correct,
         total: this.total, bestStreak: this.bestStreak,
         results: this.results,
+        mode: this.settings.mode,
       },
     }));
   }

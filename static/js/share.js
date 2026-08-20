@@ -1,6 +1,6 @@
 'use strict';
 
-async function generateShareImage({ score, bestStreak, correct, total, results, isDaily }) {
+async function generateShareImage({ score, bestStreak, correct, total, results, isDaily, mode }) {
   await document.fonts.ready;
 
   const S       = 2;
@@ -150,7 +150,8 @@ async function generateShareImage({ score, bestStreak, correct, total, results, 
 
     // Sprite
     if (imgs[i]) {
-      if (isDaily) ctx.filter = 'brightness(0)';
+      const useSilhouette = mode === 'silhouette' || isDaily;
+      if (useSilhouette) ctx.filter = 'brightness(0)';
       ctx.drawImage(
         imgs[i],
         x + (CW - SPRITE_SIZE) / 2,
@@ -158,7 +159,7 @@ async function generateShareImage({ score, bestStreak, correct, total, results, 
         SPRITE_SIZE,
         SPRITE_SIZE
       );
-      if (isDaily) ctx.filter = 'none';
+      if (useSilhouette) ctx.filter = 'none';
     }
   });
 
