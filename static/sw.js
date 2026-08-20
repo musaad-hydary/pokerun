@@ -47,17 +47,14 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Cache-first for local assets; fall back to network then cache
+  // Network-first for local assets; fall back to cache if offline
   e.respondWith(
-    caches.match(request).then(cached => {
-      if (cached) return cached;
-      return fetch(request).then(response => {
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE).then(c => c.put(request, clone));
-        }
-        return response;
-      });
-    })
+    fetch(request).then(response => {
+      if (response.ok) {
+        const clone = response.clone();
+        caches.open(CACHE).then(c => c.put(request, clone));
+      }
+      return response;
+    }).catch(() => caches.match(request))
   );
 });
