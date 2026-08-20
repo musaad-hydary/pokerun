@@ -77,10 +77,6 @@ class Quiz {
 
     const typeEl = document.getElementById('bwPokeTypes');
     typeEl.innerHTML = '';
-    // Types hidden when hints enabled — revealed via hint or on answer
-    if (!window.HINTS_ENABLED) {
-      this._showTypes(pokemon);
-    }
 
     document.getElementById('bwHpBar').style.width      = '100%';
     document.getElementById('bwHpBar').style.background = '#28C828';
@@ -282,7 +278,7 @@ class Quiz {
 
       document.getElementById('bwPokeName').textContent = this._cleanName(this.pokemon.name).toUpperCase();
       this._revealArtwork();
-      if (window.HINTS_ENABLED) this._showTypes(this.pokemon);
+      this._showTypes(this.pokemon);
       const hpBar = document.getElementById('bwHpBar');
       hpBar.style.width      = correct ? '100%' : '25%';
       hpBar.style.background = correct ? '#28C828' : '#F82020';
@@ -321,7 +317,7 @@ class Quiz {
 
       document.getElementById('bwPokeName').textContent = this._cleanName(this.pokemon.name).toUpperCase();
       this._revealArtwork();
-      if (window.HINTS_ENABLED) this._showTypes(this.pokemon);
+      this._showTypes(this.pokemon);
       const hpBar = document.getElementById('bwHpBar');
       hpBar.style.width      = correct ? '100%' : '25%';
       hpBar.style.background = correct ? '#28C828' : '#F82020';
@@ -354,7 +350,7 @@ class Quiz {
 
     document.getElementById('bwPokeName').textContent = this.pokemon.name.toUpperCase();
     this._revealArtwork();
-    if (window.HINTS_ENABLED) this._showTypes(this.pokemon);
+    this._showTypes(this.pokemon);
     const hpBar = document.getElementById('bwHpBar');
     hpBar.style.width      = correct ? '100%' : '25%';
     hpBar.style.background = correct ? '#28C828' : '#F82020';
@@ -422,7 +418,7 @@ class Quiz {
 
     document.getElementById('bwPokeName').textContent = this.pokemon.name.toUpperCase();
     this._revealArtwork();
-    if (window.HINTS_ENABLED) this._showTypes(this.pokemon);
+    this._showTypes(this.pokemon);
     const hpBar = document.getElementById('bwHpBar');
     hpBar.style.width      = '25%';
     hpBar.style.background = '#F82020';
